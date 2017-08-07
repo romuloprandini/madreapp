@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<bar:BottomBarPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:bar="clr-namespace:BottomBar.XamarinForms;assembly=BottomBar.XamarinForms"
+             x:Class="MadreApp.Pages.MainPage"
+             xmlns:pages="clr-namespace:MadreApp.Pages">
+    <pages:CallPage Title="Principal" Icon="ic_home.png"/>
+    <pages:UserPage Title="Perfil" Icon="ic_friends.png"/>
+    <pages:ConfigurationPage Title="Configuração" Icon="ic_settings.png"/>
+</bar:BottomBarPage>

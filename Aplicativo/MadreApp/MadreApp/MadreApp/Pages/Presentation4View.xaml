@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MadreApp.Pages.Presentation4View"
+             BackgroundColor="Red">
+  <ContentView.Content>
+      <StackLayout>
+          <Label 
+              Text="Presentation 4" 
+              TextColor="White"/>
+            <Button 
+                Text="Avançar"
+                BackgroundColor="White"
+                TextColor="DarkGray" 
+                HorizontalOptions="EndAndExpand"
+                VerticalOptions="EndAndExpand"
+                Clicked="AvancarButton_Clicked"
+                Margin="0,0,10,20"/>
+        </StackLayout>
+  </ContentView.Content>
+</ContentView>

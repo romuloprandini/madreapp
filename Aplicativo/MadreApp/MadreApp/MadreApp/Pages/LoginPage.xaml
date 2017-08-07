@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MadreApp.Pages.LoginPage"
+             xmlns:controls="clr-namespace:MadreApp.Customs"
+             IsBusy="{Binding IsBusy}">
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                         AbsoluteLayout.LayoutFlags="All" >
+                <Image Source="Icon"
+                   HeightRequest="80"
+                   WidthRequest="80" 
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+                <Label Text="Nome" />
+                <Entry Placeholder="Nome" 
+                       HorizontalOptions="FillAndExpand"
+                       Text="{Binding Nome}"/>
+
+                <Label Text="Telefone" />
+                <StackLayout Orientation="Horizontal" 
+                             VerticalOptions="Center"
+                             HorizontalOptions="FillAndExpand">
+                    <Label Text="+55" FontAttributes="Bold"/>
+                    <Entry Placeholder="Telefone" 
+                           Keyboard="Telephone"
+                           HorizontalOptions="FillAndExpand"
+                           Text="{Binding Telefone}"/>
+                </StackLayout>
+
+                <Button Text="Entrar" 
+                    Command="{Binding LoginCommand}"/>
+
+                <BoxView Color="LightGray"
+                     HeightRequest="2"
+                     HorizontalOptions="FillAndExpand"
+                     Margin="0,10,10,0" />
+
+                <controls:FacebookLoginButton Text="Entrar pelo Facebook" 
+                                          Command="{Binding FacebookLoginCommand}"
+                                          OnSuccess="{Binding OnSucessFacebook}" 
+                                          OnError="{Binding OnErrorFacebook}" 
+                                          OnCancel="{Binding OnCancelFacebook}"/>
+            </StackLayout>
+            <BoxView IsVisible="{Binding IsBusy}" 
+                     BackgroundColor="Black"
+                     Opacity=".5"
+                     AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                               AbsoluteLayout.LayoutFlags="All" />
+            <ActivityIndicator IsVisible="{Binding IsBusy}" 
+                               IsRunning="True"
+                               AbsoluteLayout.LayoutBounds=".5, .5, 80, 80"
+                               AbsoluteLayout.LayoutFlags="PositionProportional" />
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

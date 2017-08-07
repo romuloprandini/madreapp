@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MadreApp.Pages.UserPage">
+    <ContentPage.Content>
+        <TableView Intent="Form"
+                   HasUnevenRows="True">
+            <TableRoot>
+                <TableSection Title="">
+                    <!-- Avatar -->
+                    <ViewCell Height="160">
+                        <StackLayout HorizontalOptions="FillAndExpand"
+                                     VerticalOptions="FillAndExpand">
+                            <Image Source="ic_friends"
+                                   HorizontalOptions="CenterAndExpand"
+                                   VerticalOptions="CenterAndExpand" />
+                            <Button Text="Alterar foto"></Button>
+                        </StackLayout>
+                    </ViewCell>
+                </TableSection>
+                <TableSection Title="Dados do usuário">
+                    <!-- Nome -->
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Nome" 
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding Nome}" />
+                        </StackLayout>
+                    </ViewCell>
+                    <!-- Telefone -->
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Telefone" 
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding Telefone}" />
+                        </StackLayout>
+                    </ViewCell>
+                    <!-- Email -->
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Email" 
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding Email}" />
+                        </StackLayout>
+                    </ViewCell>
+                    <!-- Nascimento -->
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Nascimento" 
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding Nascimento}" />
+                        </StackLayout>
+                    </ViewCell>
+                </TableSection>
+            </TableRoot>
+        </TableView>
+    </ContentPage.Content>
+</ContentPage>

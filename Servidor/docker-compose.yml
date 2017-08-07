@@ -1,0 +1,44 @@
+version: '3'
+services:
+    # Web aplicationp service
+    web:
+        build:
+            context: ./
+            dockerfile: ./deploy/web.docker
+        container_name: madreapp.web
+        volumes:
+            - ./web/html:/var/www/html
+        ports:
+            - 80:80
+        links:
+            - app-database:app-database
+        entrypoint: /run.sh
+
+    app-database:
+        image: mysql:5.7
+        container_name: madreapp.db
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=rootpassword
+            - MYSQL_DATABASE=madreapp
+            - MYSQL_USER=madreapp
+            - MYSQL_PASSWORD=madreapppassword
+        volumes:
+            - ./database/data:/var/lib/mysql
+            - ./database/sql/madreapp.sql:/docker-entrypoint-initdb.d/madreapp.sql
+        expose:
+             - 3306
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        ports:
+            - 8080:80
+        links:
+            - app-database:app-database
+        environment:
+            - MYSQL_USERNAME=root
+            - MYSQL_ROOT_PASSWORD=rootpassword
+            - PMA_ARBITRARY=1
+        restart: always
+        volumes:
+         - /sessions

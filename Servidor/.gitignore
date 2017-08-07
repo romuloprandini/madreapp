@@ -1,0 +1,9 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# database files
+database/data/
+
+web/html/.env
+web/html/vendors/
+!web/html/public/.htaccess
+!web/html/public/index.php
