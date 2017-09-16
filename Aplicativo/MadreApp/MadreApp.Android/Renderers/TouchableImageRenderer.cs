@@ -1,29 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using MadreApp.Droid.Renderers;
-using FFImageLoading.Forms.Droid;
-using Xamarin.Forms.Platform.Android;
-using MadreApp.Customs;
+﻿using Android.Views;
 using Android.Widget;
+using MadreApp.Customs;
+using MadreApp.Droid.Renderers;
+using Xamarin.Forms.Platform.Android;
 using static Android.Views.View;
-using System.ComponentModel;
-using Android.Graphics.Drawables;
-using Android.Util;
 
 [assembly: Xamarin.Forms.ExportRenderer(typeof(TouchableImage), typeof(TouchableImageRenderer))]
 namespace MadreApp.Droid.Renderers
 {
     public class TouchableImageRenderer : ViewRenderer<TouchableImage, View>, IOnLongClickListener
     {
-        TouchableImage touchableImage;
+        private TouchableImage _touchableImage;
         
         protected override void OnElementChanged(ElementChangedEventArgs<TouchableImage> e)
         {
@@ -31,13 +18,13 @@ namespace MadreApp.Droid.Renderers
 
             if (e.NewElement == null) return;
 
-            touchableImage = e.NewElement;
+            _touchableImage = e.NewElement;
 
             if (Control != null) return;
 
             var image = new ImageView(Context);
 
-            int resImage = (int)typeof(Resource.Drawable).GetField(touchableImage.Source).GetVa‌​lue(null);
+            int resImage = (int)typeof(Resource.Drawable).GetField(_touchableImage.Source).GetVa‌​lue(null);
             image.SetImageResource(resImage);
             image.SetScaleType(ImageView.ScaleType.FitCenter);
             image.SetAdjustViewBounds(true);
@@ -50,7 +37,7 @@ namespace MadreApp.Droid.Renderers
 
         public bool OnLongClick(View v)
         {
-            if(touchableImage?.OnLongClick != null && touchableImage.OnLongClick.CanExecute(null)) touchableImage.OnLongClick.Execute(null);
+            if(_touchableImage?.OnLongClick != null && _touchableImage.OnLongClick.CanExecute(null)) _touchableImage.OnLongClick.Execute(null);
             return true;
         }
 
@@ -58,15 +45,15 @@ namespace MadreApp.Droid.Renderers
         {
             e.Handled = false;
 
-            if (touchableImage == null) return;
+            if (_touchableImage == null) return;
 
             switch (e.Event.Action)
             {
                 case MotionEventActions.Down:
-                    if (touchableImage.OnTouchStartCommand != null && touchableImage.OnTouchStartCommand.CanExecute(null)) touchableImage.OnTouchStartCommand.Execute(null);
+                    if (_touchableImage.OnTouchStartCommand != null && _touchableImage.OnTouchStartCommand.CanExecute(null)) _touchableImage.OnTouchStartCommand.Execute(null);
                     break;
                 case MotionEventActions.Up:
-                    if (touchableImage.OnTouchEndCommand != null && touchableImage.OnTouchEndCommand.CanExecute(null)) touchableImage.OnTouchEndCommand.Execute(null);
+                    if (_touchableImage.OnTouchEndCommand != null && _touchableImage.OnTouchEndCommand.CanExecute(null)) _touchableImage.OnTouchEndCommand.Execute(null);
                     break;
             }
         }

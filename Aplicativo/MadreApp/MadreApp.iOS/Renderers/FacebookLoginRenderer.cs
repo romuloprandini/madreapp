@@ -5,20 +5,14 @@ using Facebook.LoginKit;
 using Button = Xamarin.Forms.Button;
 using MadreApp.Customs;
 using MadreApp.iOS.Renderers;
+using Facebook.CoreKit;
+using Foundation;
 
 [assembly: ExportRenderer(typeof(FacebookLoginButton), typeof(FacebookLoginRenderer))]
 namespace MadreApp.iOS.Renderers
 {
     public class FacebookLoginRenderer : ButtonRenderer
     {
-        /// <summary>
-        /// The read permissions
-        /// </summary>
-        readonly string[] _readPermissions =
-        {
-            "public_profile","email"
-        };
-
         protected FacebookLoginButton buttom;
         protected override void OnElementChanged(ElementChangedEventArgs<Button> e)
         {
@@ -32,21 +26,20 @@ namespace MadreApp.iOS.Renderers
             {
                 var loginManager = new LoginManager();
                 loginManager.LogOut();
-                loginManager.LogInWithReadPermissions(_readPermissions, Control.InputViewController, (result, error) =>
+                loginManager.LogInWithReadPermissions("public_profile,email,user_birthday".Split(','), Control.InputViewController, (result, error) =>
                 {
                     if (error != null)
                     {
-                        buttom.OnError?.Execute(null);
-                        Console.WriteLine("HelloFacebook: Error: {0}", error.Description);
+                        buttom.OnError?.Execute(error.Description);
                     }
                     else if (result.IsCancelled)
                     {
                         buttom.OnCancel?.Execute(null);
-                        Console.WriteLine("HelloFacebook: Canceled");
                     }
                     else
                     {
-                        buttom.OnSuccess?.Execute(new FacebookResult { Token = result.Token.TokenString, ExpireTime = result.Token.ExpirationDate.ToDateTime().Ticks });
+                        var request = new GraphRequest("/" + result.Token.UserID, new NSDictionary("fields", "id,birthday,email,gender,name"), result.Token.TokenString, null, "GET");
+                        request.Start((connection, obj, nsError) => buttom.OnSuccess?.Execute(NSJsonSerialization.Serialize(obj, NSJsonWritingOptions.PrettyPrinted, out nsError).ToString()));
                     }
                 });
             };

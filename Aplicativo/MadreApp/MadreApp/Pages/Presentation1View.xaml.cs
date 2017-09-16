@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,7 +9,13 @@ namespace MadreApp.Pages
     {
         public Presentation1View()
         {
-            InitializeComponent();
+            var view = new RelativeLayout();
+
+            var logo = new Image() { Source = "logotipo.png", Scale = .9 };
+
+            view.Children.Add(logo, yConstraint: Constraint.RelativeToParent(p => p.Height / 2 - logo.Measure(p.Width, p.Height).Request.Height / 2));
+
+            Content = view;
         }
     }
 }

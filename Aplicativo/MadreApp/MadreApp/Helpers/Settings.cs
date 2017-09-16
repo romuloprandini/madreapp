@@ -11,56 +11,148 @@ namespace MadreApp.Helpers
 	/// </summary>
 	public static class Settings
 	{
-		private static ISettings AppSettings
+        #region Setting Constants
+        
+        private const string _phoneKey = "phone_key";
+        private const string _nameKey = "name_key";
+        private const string _emailKey = "email_key";
+        private const string _genderKey = "gender_key";
+        private const string _birthdayKey = "birthday_key";
+        private const string _fiscalNumber = "fiscal_number_key";
+        private const string _madreCardNumber = "madre_card_number_key";
+        private const string _madreCardActive = "madre_card_active_key";
+        private const string _madreCardPassword = "madre_card_password_key";
+
+        #endregion
+
+        private static ISettings AppSettings
 		{
 			get
 			{
 				return CrossSettings.Current;
 			}
 		}
-
-		#region Setting Constants
-
-		private const string NomeKey = "nome_key";
-        private const string TelefoneKey = "telefone_key";
-        private const string ShowPresentationKey = "show_presentation_key";
-
-        #endregion
-
-        public static bool ShowPresentation
+        
+        public static string Phone
         {
             get
             {
-                return AppSettings.GetValueOrDefault(ShowPresentationKey, true);
+                return AppSettings.GetValueOrDefault(_phoneKey, string.Empty);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(ShowPresentationKey, value);
+                AppSettings.AddOrUpdateValue(_phoneKey, value);
             }
         }
-
-        public static string Nome
+        
+        public static string Name
 		{
 			get
 			{
-				return AppSettings.GetValueOrDefault(NomeKey, string.Empty);
+				return AppSettings.GetValueOrDefault(_nameKey, string.Empty);
 			}
 			set
 			{
-				AppSettings.AddOrUpdateValue(NomeKey, value);
+				AppSettings.AddOrUpdateValue(_nameKey, value);
 			}
 		}
 
-        public static string Telefone
+        public static string Email
         {
             get
             {
-                return AppSettings.GetValueOrDefault(TelefoneKey, string.Empty);
+                return AppSettings.GetValueOrDefault(_emailKey, string.Empty);
             }
             set
             {
-                AppSettings.AddOrUpdateValue(TelefoneKey, value);
+                AppSettings.AddOrUpdateValue(_emailKey, value);
             }
+        }
+
+        public static string Gender
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(_genderKey, string.Empty);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(_genderKey, value);
+            }
+        }
+
+        public static string Birthday
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(_birthdayKey, string.Empty);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(_birthdayKey, value);
+            }
+        }
+
+        public static string FiscalNumber
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(_fiscalNumber, string.Empty);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(_fiscalNumber, value);
+            }
+        }
+
+        public static string MadreCardNumber
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(_madreCardNumber, string.Empty);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(_madreCardNumber, value);
+            }
+        }
+
+        public static string MadreCardPassword
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(_madreCardPassword, string.Empty);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(_madreCardPassword, value);
+            }
+        }
+
+        public static bool MadreCardActive
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(_madreCardActive, false);
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(_madreCardActive, value);
+            }
+        }
+
+        public static object Call()
+        {
+            if (string.IsNullOrWhiteSpace(MadreCardNumber))
+            {
+                return new { nome = Name, telefone = Phone };
+            }
+            return new { nome = Name, telefone = Phone, madrecard = new { numero = MadreCardNumber, ativo = MadreCardActive } };
+        }
+
+        public static object MadreCardLogin()
+        {
+            return new { cpf = FiscalNumber, telefone = Phone, madrecard = new { password = MadreCardPassword } };
         }
     }
 }

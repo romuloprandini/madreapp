@@ -18,13 +18,12 @@ namespace MadreApp.ViewModel
         {
             try
             {
-                var ligacao = await HttpRequest.Instance.PostRequest<object>("/ligacao", new { nome = Settings.Nome, telefone = Settings.Telefone });
+                var ligacao = await HttpRequest.Instance.PostRequest<object>("/ligacao", new { nome = Settings.Name, telefone = Settings.Phone });
             } catch(Exception ex)
             {
                 Application.Current.MainPage?.DisplayAlert("Erro", "Não foi possível efetuar a chamada", "Ok");
                 Debug.WriteLine(ex.Message);
             }
-
         }));
     }
 }

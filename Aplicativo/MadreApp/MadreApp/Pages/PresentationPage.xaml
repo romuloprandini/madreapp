@@ -2,8 +2,14 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MadreApp.Pages.PresentationPage"
-             xmlns:carousel="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions">
+             xmlns:carousel="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
+             IsBusy="{Binding IsBusy}" >
     <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="ContentPage" ApplyToDerivedTypes="true">
+                <Setter Property="BackgroundImage" Value="PresentationBackground.jpg" />
+            </Style>
+        </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout>
@@ -20,17 +26,6 @@
             VerticalOptions="FillAndExpand" 
             HorizontalOptions="FillAndExpand">
             </carousel:CarouselViewControl>
-            <Button Text="Pular"
-                    FontSize="10"
-                    AbsoluteLayout.LayoutBounds=".95,10,60,40"
-                    AbsoluteLayout.LayoutFlags="XProportional"
-                    BorderWidth="0"
-                    BorderColor="LightGray"
-                    BackgroundColor="LightBlue"
-                    TextColor="White"
-                    IsVisible="{Binding ShowSkip}"
-                    Command="{Binding SkipCommand}"
-                    ></Button>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

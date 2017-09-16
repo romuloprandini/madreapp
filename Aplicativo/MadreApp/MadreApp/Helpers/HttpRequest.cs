@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -12,18 +11,18 @@ namespace MadreApp.Helpers
 {
     public class HttpRequest
     {
-        public const string BASEURL = "http://104.154.65.154/api";
+        private const string BASEURL = "http://104.154.65.154/api";
         private static string _token = "";
         private readonly HttpClient _client;
+        private static HttpRequest _instance;
+
+        public static HttpRequest Instance => _instance ?? (_instance = new HttpRequest());
 
         private HttpRequest()
         {
-            _client = new HttpClient() { MaxResponseContentBufferSize = 256000, Timeout = new TimeSpan(0, 5, 0) };
+            _client = new HttpClient() { MaxResponseContentBufferSize = 256000, Timeout = TimeSpan.FromMinutes(5) };
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
-
-        private static HttpRequest _instance;
-        public static HttpRequest Instance => _instance ?? (_instance = new HttpRequest());
         
         protected async Task<string> ProcessResponse(HttpResponseMessage response)
         {
@@ -41,27 +40,19 @@ namespace MadreApp.Helpers
                 throw new Exception("Invalid Request - " + ex?.Message);
             }
         }
-
-        public static string Token
-        {
-            set { _token = value; }
-            get { return _token; }
-        }
-
+        
         public async Task<List<T>> GetRequest<T>(string relativeUri) where T : class, new()
         {
-            var uri = BASEURL + relativeUri;
             _client.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("Bearer " + _token);
-            var response = await _client.GetAsync(uri);
+            var response = await _client.GetAsync(BASEURL + relativeUri);
             var content = await ProcessResponse(response);
             return JsonConvert.DeserializeObject<List<T>>(content);
         }
 
         public async Task<T> GetOneRequest<T>(string relativeUri) where T : new()
         {
-            var uri = BASEURL + relativeUri;
             _client.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("Bearer " + _token);
-            var response = await _client.GetAsync(uri);
+            var response = await _client.GetAsync(BASEURL + relativeUri);
             var content = await ProcessResponse(response);
             var item = JsonConvert.DeserializeObject<T>(content);
             return item;
@@ -69,38 +60,30 @@ namespace MadreApp.Helpers
 
         public async Task<T> PostRequest<T>(string relativeUri, object item = null) where T : class, new()
         {
-            var uri = BASEURL + relativeUri;
-            var json = "";
-            if (item != null)
-            {
-                json = JsonConvert.SerializeObject(item);
-            }
+            var json = item == null ? string.Empty : JsonConvert.SerializeObject(item, Formatting.Indented);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
             _client.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("Bearer " + _token);
-            var response = await _client.PostAsync(uri, stringContent);
+            var response = await _client.PostAsync(BASEURL + relativeUri, stringContent);
             var content = await ProcessResponse(response);
             return JsonConvert.DeserializeObject<T>(content);
         }
 
         public async Task<T> PutRequest<T>(string relativeUri, object item) where T : class, new()
         {
-            var uri = BASEURL + relativeUri;
             var json = JsonConvert.SerializeObject(item);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
             _client.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("Bearer " + _token);
-            var response = await _client.PutAsync(uri, stringContent);
+            var response = await _client.PutAsync(BASEURL + relativeUri, stringContent);
             var content = await ProcessResponse(response);
             return JsonConvert.DeserializeObject<T>(content);
         }
 
         public async Task<IList<T>> PostRequest<T>(string relativeUri, IList<object> items) where T : class, new()
         {
-            var uri = BASEURL + relativeUri;
             var json = JsonConvert.SerializeObject(new { data = items });
-            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
-            
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");           
             _client.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("Bearer " + _token);
-            var response = await _client.PostAsync(uri, stringContent);
+            var response = await _client.PostAsync(BASEURL + relativeUri, stringContent);
             var content = await ProcessResponse(response);
             return JsonConvert.DeserializeObject<IList<T>>(content);
         }
@@ -140,24 +123,19 @@ namespace MadreApp.Helpers
 
         public async Task<bool> DeleteRequest(string relativeUri)
         {
-            var uri = BASEURL + relativeUri;
-
             _client.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("Bearer " + _token);
-            var response = await _client.DeleteAsync(uri);
+            var response = await _client.DeleteAsync(BASEURL + relativeUri);
             return response.IsSuccessStatusCode;
         }
 
         public async Task<int> CountRequest(string relativeUri)
         {
-            var uri = BASEURL + relativeUri;
-
             _client.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("Bearer " + _token);
-            var response = await _client.GetAsync(uri);
+            var response = await _client.GetAsync(BASEURL + relativeUri);
             var content = await ProcessResponse(response);
             var def = new { count = 0 };
             var result = JsonConvert.DeserializeAnonymousType(content, def);
             return result.count;
-
         }
 
         public void CancelRequests()

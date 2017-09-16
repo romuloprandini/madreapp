@@ -1,10 +1,5 @@
 ﻿using MadreApp.Helpers;
 using MadreApp.Pages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Xamarin.Forms;
 
 namespace MadreApp
@@ -15,33 +10,14 @@ namespace MadreApp
         {
             InitializeComponent();
 
-            if (Settings.ShowPresentation)
+            if (true)//string.IsNullOrEmpty(Settings.Name))
             {
                 MainPage = new PresentationPage();
-            }
-            else if(string.IsNullOrEmpty(Settings.Nome) || string.IsNullOrEmpty(Settings.Telefone))
-            {
-                MainPage = new LoginPage();
             }
             else
             {
                 MainPage = new MainPage();
             }
-        }
-
-        protected override void OnStart()
-        {
-            // Handle when your app starts
-        }
-
-        protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-        }
-
-        protected override void OnResume()
-        {
-            // Handle when your app resumes
         }
     }
 }

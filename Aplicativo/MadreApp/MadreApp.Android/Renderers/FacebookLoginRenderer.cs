@@ -1,59 +1,51 @@
-﻿using System;
-using Xamarin.Forms;
-using System.Collections.Generic;
-using Xamarin.Facebook.Login;
-using Xamarin.Forms.Platform.Android;
+﻿using Android.OS;
 using MadreApp.Customs;
+using MadreApp.Droid.Helpers;
 using MadreApp.Droid.Renderers;
+using System.Collections.Generic;
+using Xamarin.Facebook;
+using Xamarin.Facebook.Login;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(FacebookLoginButton), typeof(FacebookLoginRenderer))]
 namespace MadreApp.Droid.Renderers
 {
     public class FacebookLoginRenderer : ButtonRenderer
     {
-        public FacebookLoginRenderer()
-        {
-        }
-        /// <summary>
-        /// The read permissions
-        /// </summary>
-        readonly List<string> _readPermissions = new List<string>
-        {
-            "public_profile,email"
-        };
+        protected FacebookLoginButton _buttom;
 
-        protected FacebookLoginButton buttom;
         protected override void OnElementChanged(ElementChangedEventArgs<Button> e)
         {
             base.OnElementChanged(e);
             if (e.NewElement != null)
             {
-                buttom = e.NewElement as FacebookLoginButton;
+                _buttom = e.NewElement as FacebookLoginButton;
             }
 
-            var activity = Xamarin.Forms.Forms.Context as MainActivity;
+            var activity = Forms.Context as MainActivity;
 
-            buttom.Clicked += (sender, args) =>
+            _buttom.Clicked += (sender, args) =>
             {
                 var facebookCallback = new FacebookCallback<LoginResult>
                 {
+                    HandleCancel = () => _buttom.OnCancel?.Execute(null),
 
-                    HandleSuccess = shareResult => {
-                        buttom.OnSuccess?.Execute(new FacebookResult { Token = shareResult.AccessToken.Token, ExpireTime = shareResult.AccessToken.Expires.Time });
-                    },
-                    HandleCancel = () => {
-                        buttom.OnCancel?.Execute(null);
-                        Console.WriteLine("HelloFacebook: Canceled");
-                    },
-                    HandleError = shareError => {
-                        buttom.OnError?.Execute(null);
-                        Console.WriteLine("HelloFacebook: Error: {0}", shareError);
-                    }
+                    HandleError = error => _buttom.OnError?.Execute(error.Message),
+
+                    HandleSuccess = result => 
+                    {
+                        var parameters = new Bundle();
+                        parameters.PutString("fields", "id,birthday,email,gender,name");
+                        var graphCallback = new GraphCallback();
+                        graphCallback.RequestCompleted += (s, r) => _buttom.OnSuccess?.Execute(r.Response.RawResponse);
+                        new GraphRequest(result.AccessToken, "/" + result.AccessToken.UserId, parameters, HttpMethod.Get, graphCallback).ExecuteAsync();
+                    }           
                 };
 
                 LoginManager.Instance.LogOut();
                 LoginManager.Instance.RegisterCallback(MainActivity.CallbackManager, facebookCallback);
-                LoginManager.Instance.LogInWithReadPermissions(activity, _readPermissions);
+                LoginManager.Instance.LogInWithReadPermissions(activity, new List<string> { "public_profile,email,user_birthday" });
             };
         }
     }

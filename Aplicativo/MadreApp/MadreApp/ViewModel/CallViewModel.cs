@@ -50,9 +50,10 @@ namespace MadreApp.ViewModel
                     IsBusy = true;
                     Device.BeginInvokeOnMainThread(async () =>
                     {
-                        await HttpRequest.Instance.PostRequest<object>("/ligacao", new { nome = Settings.Nome, telefone = Settings.Telefone });
+                        var result = await HttpRequest.Instance.PostRequest<object>("/ligacao",  Settings.Call());
+                        
                         IsBusy = false;
-                        await Application.Current.MainPage.DisplayAlert("Sucesso", "Aguarde que em alguns minutos ligaremos para você \n Seu número: " + Settings.Telefone, "Ok");
+                        await Application.Current.MainPage.DisplayAlert("Sucesso", "Aguarde que em alguns minutos ligaremos para você \n Seu número: " + Settings.Phone, "Ok");
                     });
                 }
                 return isPressed;

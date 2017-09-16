@@ -1,35 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.Android;
+﻿using Android.App;
 using MadreApp.Customs;
 using MadreApp.Droid.Renderers;
+using System.ComponentModel;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
 
-[assembly: Xamarin.Forms.ExportRenderer(typeof(CirularProgressBar), typeof(CircularProgressBarRenderer))]
+[assembly: ExportRenderer(typeof(CirularProgressBar), typeof(CircularProgressBarRenderer))]
 namespace MadreApp.Droid.Renderers
 {
     public class CircularProgressBarRenderer : ProgressBarRenderer
     {
-        CirularProgressBar progressBar;
-        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.ProgressBar> e)
+        private CirularProgressBar _progressBar;
+
+        protected override void OnElementChanged(ElementChangedEventArgs<ProgressBar> e)
         {
             base.OnElementChanged(e);
 
             if (e.NewElement == null) return;
 
-            progressBar = (CirularProgressBar)e.NewElement;
+            _progressBar = (CirularProgressBar)e.NewElement;
 
-            Android.Widget.ProgressBar view = (Android.Widget.ProgressBar)(Context as Activity).LayoutInflater.Inflate(Resource.Layout.CircularProgressBar, null, false);
+            var view = (Android.Widget.ProgressBar)(Context as Activity).LayoutInflater.Inflate(Resource.Layout.CircularProgressBar, null, false);
             view.Progress = 0;
             SetNativeControl(view);
         }
@@ -40,14 +31,7 @@ namespace MadreApp.Droid.Renderers
 
             if (e.PropertyName == "Progress")
             {
-                if (progressBar.Progress > 0)
-                {
-                    Control.Progress = (int)(progressBar.Progress * 100);
-                }
-                else
-                {
-                    Control.Progress = 0;
-                }
+                Control.Progress = _progressBar.Progress > 0 ? (int)(_progressBar.Progress * 100) : 0;
             }
         }
     }

@@ -184,7 +184,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\Settings.cs" />
+    <Compile Include="Helpers\GraphCallback.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="Renderers\CircleViewRenderer.cs" />
@@ -200,6 +200,7 @@
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
+    <AndroidResource Include="Resources\drawable\map.png" />
     <AndroidResource Include="Resources\layout\PulseCircle.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -208,7 +209,9 @@
     <AndroidResource Include="Resources\drawable\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\AndroidManifest.xml" />
+    <None Include="Properties\AndroidManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Tabbar.axml" />
@@ -288,7 +291,9 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values\strings.xml" />
+    <AndroidResource Include="Resources\values\strings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\colors.xml" />
@@ -298,6 +303,21 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\CircularProgressBar.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\PresentationBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\logotipo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\doctor1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\doctor2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\iconlist.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

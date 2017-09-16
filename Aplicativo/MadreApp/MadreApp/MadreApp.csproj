@@ -38,8 +38,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Behaviors\MinLengthValidator.cs" />
+    <Compile Include="Behaviors\FiscalNumberValidator.cs" />
+    <Compile Include="Behaviors\PasswordValidator.cs" />
+    <Compile Include="Behaviors\PhoneNumberValidator.cs" />
+    <Compile Include="Behaviors\Validators.cs" />
     <Compile Include="Converters\BooleanInverter.cs" />
+    <Compile Include="Customs\ButtonCommand.cs" />
     <Compile Include="Customs\CirularProgressBar.cs" />
     <Compile Include="Customs\FacebookLoginButton.cs" />
     <Compile Include="Customs\TouchableImage.cs" />
@@ -49,12 +53,15 @@
     <Compile Include="Pages\CallPage.xaml.cs">
       <DependentUpon>CallPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ConfigurationPage.xaml.cs">
-      <DependentUpon>ConfigurationPage.xaml</DependentUpon>
+    <Compile Include="Pages\MadreCardLoginPage.xaml.cs">
+      <DependentUpon>MadreCardLoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Customs\CircleView.cs" />
-    <Compile Include="Pages\LoginPage.xaml.cs">
-      <DependentUpon>LoginPage.xaml</DependentUpon>
+    <Compile Include="Pages\MadreCardPage.xaml.cs">
+      <DependentUpon>MadreCardPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\NewUserLoginPage.xaml.cs">
+      <DependentUpon>NewUserLoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -68,21 +75,26 @@
     <Compile Include="Pages\Presentation3View.xaml.cs">
       <DependentUpon>Presentation3View.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Presentation6View.xaml.cs">
+      <DependentUpon>Presentation6View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Presentation5View.xaml.cs">
+      <DependentUpon>Presentation5View.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Presentation4View.xaml.cs">
       <DependentUpon>Presentation4View.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PresentationPage.xaml.cs">
       <DependentUpon>PresentationPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\UserPage.xaml.cs">
-      <DependentUpon>UserPage.xaml</DependentUpon>
+    <Compile Include="Pages\ProfilePage.xaml.cs">
+      <DependentUpon>ProfilePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\CallViewModel.cs" />
-    <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\PresentationViewModel.cs" />
-    <Compile Include="ViewModel\UserViewModel.cs" />
+    <Compile Include="ViewModel\ProfileViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Pages\MainPage.xaml">
@@ -96,7 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BottomBar.XamarinForms">
-      <HintPath>..\..\..\..\Users\Romulo Prandini\.nuget\packages\thrivegmbh.bottomnavigationbar.xf\1.0.2\lib\portable-net45+win8+wpa81\BottomBar.XamarinForms.dll</HintPath>
+      <HintPath>..\..\BottomBar.XamarinForms.dll</HintPath>
     </Reference>
     <Reference Include="CarouselView.FormsPlugin.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\CarouselView.FormsPlugin.4.4.2\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid10+Xamarin.iOS10\CarouselView.FormsPlugin.Abstractions.dll</HintPath>
@@ -132,7 +144,7 @@
       <HintPath>..\..\packages\Xam.Plugins.Settings.3.0.1\lib\netstandard1.0\Plugin.Settings.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\ReferenceAssemblies\Microsoft\Framework\MonoAndroid\v1.0\System.Net.Http.dll</HintPath>
+      <HintPath>..\..\packages\System.Net.Http.4.3.2\lib\net46\System.Net.Http.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.4.247\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Core.dll</HintPath>
@@ -155,7 +167,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Pages\ConfigurationPage.xaml">
+    <EmbeddedResource Include="Pages\MadreCardLoginPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -191,13 +203,31 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Pages\LoginPage.xaml">
+    <EmbeddedResource Include="Pages\NewUserLoginPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Pages\UserPage.xaml">
+    <EmbeddedResource Include="Pages\ProfilePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\Presentation5View.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\MadreCardPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\Presentation6View.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
