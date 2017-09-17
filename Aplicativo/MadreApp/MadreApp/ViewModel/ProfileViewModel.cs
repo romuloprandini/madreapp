@@ -6,6 +6,7 @@ using MvvmHelpers;
 using System.Windows.Input;
 using Xamarin.Forms;
 using System;
+using Newtonsoft.Json.Linq;
 
 namespace MadreApp.ViewModel
 {
@@ -14,30 +15,33 @@ namespace MadreApp.ViewModel
         private string _birthday;
         private string _email;
         private string _fiscalNumber;
-        private string _madreCard;
+        private string _madreCardNumber;
+        private bool _madreCardActive;
+        private string _madreCardBalance;
+        private string _madreCardPassword;
         private string _name;
         private string _phone;
-        private string _password;
         private ICommand _madreCardLoginCommand;
         private ICommand _newUserLoginCommand;
 
-        public ICommand MadreCardLoginCommand => _madreCardLoginCommand ?? (_madreCardLoginCommand = new ButtonCommand(async () =>
+        public ICommand MadreCardLoginCommand => _madreCardLoginCommand ?? (_madreCardLoginCommand = new ButtonCommand(() =>
             {
-                Settings.FiscalNumber = FiscalNumber;
-                Settings.MadreCardPassword = Password;
-                Settings.Phone = Phone;
+                IsBusy = true;
+                Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        var result = await HttpRequest.Instance.GetOneRequest<JObject>("/madrecard/" + Settings.FiscalNumber);
 
-                try
-                {
-                    var result = await HttpRequest.Instance.GetOneRequest<object>("/madrecard/" + Settings.MadreCardLogin());
-                }
-                catch (Exception e)
-                {
-                    
-                }
-                
-                Application.Current.MainPage = new MainPage();
+                        Settings.MadreCardNumber = result["numero"].ToString();
+                        Settings.MadreCardActive = bool.Parse(result["ativo"].ToString());
+                        Settings.MadreCardBalance = result["saldo"].ToString();
+                        Settings.MadreCardPassword = MadreCardPassword;
+                        Settings.FiscalNumber = result["cpf"].ToString();
+                        Settings.Name = result["nome"].ToString();
+                        Settings.Phone = Phone;
 
+                        IsBusy = false;
+                        Application.Current.MainPage = new MainPage();
+                    });              
             }, CanExecuteMadreCard, this));
 
         public ICommand NewUserLoginCommand => _newUserLoginCommand ?? (_newUserLoginCommand = new ButtonCommand(() =>
@@ -51,7 +55,10 @@ namespace MadreApp.ViewModel
             _email = Settings.Email;
             _fiscalNumber = Settings.FiscalNumber;
             _name = Settings.Name;
-            _madreCard = Settings.MadreCardNumber;
+            _madreCardNumber = Settings.MadreCardNumber;
+            _madreCardActive = Settings.MadreCardActive;
+            _madreCardBalance = Settings.MadreCardBalance;
+            _madreCardPassword = Settings.MadreCardPassword;
             _phone = Settings.Phone;
         }
 
@@ -96,16 +103,6 @@ namespace MadreApp.ViewModel
             }
         }
 
-        public string MadreCard
-        {
-            get { return _madreCard; }
-            set
-            {
-                if (_madreCard == value) return;
-                SetProperty(ref _madreCard, value);
-            }
-        }
-
         public string Phone
         {
             get { return _phone; }
@@ -116,13 +113,43 @@ namespace MadreApp.ViewModel
             }
         }
 
-        public string Password
+        public string MadreCardNumber
         {
-            get { return _password; }
+            get { return _madreCardNumber; }
             set
             {
-                if (_password == value) return;
-                SetProperty(ref _password, value);
+                if (_madreCardNumber == value) return;
+                SetProperty(ref _madreCardNumber, value);
+            }
+        }
+
+        public bool MadreCardActive
+        {
+            get { return _madreCardActive; }
+            set
+            {
+                if (_madreCardActive == value) return;
+                SetProperty(ref _madreCardActive, value);
+            }
+        }
+
+        public string MadreCardBalance
+        {
+            get { return _madreCardBalance; }
+            set
+            {
+                if (_madreCardBalance == value) return;
+                SetProperty(ref _madreCardBalance, value);
+            }
+        }
+
+        public string MadreCardPassword
+        {
+            get { return _madreCardPassword; }
+            set
+            {
+                if (_madreCardPassword == value) return;
+                SetProperty(ref _madreCardPassword, value);
             }
         }
         
@@ -130,7 +157,7 @@ namespace MadreApp.ViewModel
         {
             return
                 Validators.PhoneNumberValidator(Phone) &&
-                Validators.PasswordValidator(Password) &&
+                Validators.PasswordValidator(MadreCardPassword) &&
                 Validators.FiscalNumberValidator(FiscalNumber);
         }
 
