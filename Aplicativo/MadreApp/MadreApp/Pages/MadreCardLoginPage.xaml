@@ -20,7 +20,7 @@
                    HorizontalOptions="Center"
                    VerticalOptions="Center" />
                 <Label Text="CPF" />
-                <Entry Placeholder="CPF"
+                <Entry Placeholder="Introduza o seu CPF"
                        Keyboard="Telephone"
                        HorizontalOptions="FillAndExpand"                       
                        Text="{Binding FiscalNumber}">
@@ -35,7 +35,7 @@
                     <Label Text="+55" 
                            FontAttributes="Bold"
                            VerticalOptions="Center"/>
-                    <Entry Placeholder="Telefone" 
+                    <Entry Placeholder="Introduza o número do seu celular" 
                            Keyboard="Telephone"
                            HorizontalOptions="FillAndExpand"
                            Text="{Binding Phone}">
@@ -48,7 +48,7 @@
                 <Label Text="Senha" />
                 <StackLayout Orientation="Horizontal" 
                              HorizontalOptions="FillAndExpand">
-                    <Entry Placeholder="Senha" 
+                    <Entry Placeholder="Introduza a sua senha " 
                            IsPassword="true"
                            HorizontalOptions="FillAndExpand"
                            Text="{Binding Password}">
@@ -61,14 +61,11 @@
                 <Button Text="Entrar" 
                     Command="{Binding MadreCardLoginCommand}"/>
 
-                <Label Text="CPF inválido" 
-                        TextColor="DarkRed" 
+                <Label TextColor="DarkRed" Text="CPF inválido"
                         IsVisible="{Binding Source={x:Reference FiscalNumberValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
-                <Label Text="O telefone deve ter no mínimo 10 números" 
-                        TextColor="DarkRed" 
+                <Label  TextColor="DarkRed" Text="O telefone deve ter no mínimo 10 números"
                         IsVisible="{Binding Source={x:Reference PhoneNumberValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
-                <Label Text="Senha inválida" 
-                        TextColor="DarkRed" 
+                <Label TextColor="DarkRed" Text="Senha inválida"
                         IsVisible="{Binding Source={x:Reference PasswordValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
 
                 <BoxView Color="LightGray"
