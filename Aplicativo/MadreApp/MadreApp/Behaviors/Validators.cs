@@ -8,6 +8,15 @@ namespace MadreApp.Behaviors
 {
     public static class Validators
     {
+        public static bool EmailValidator(string email)
+        {
+            return email != null &&
+                // Email contains @, but not at start nor end
+                email.Contains("@") && !email.StartsWith("@") && !email.EndsWith("@") &&
+                // Email contains @, but not at start nor end
+                email.Contains(".") && !email.StartsWith(".") && !email.EndsWith(".");
+        }
+
         public static bool FiscalNumberValidator(string fiscalNumber)
         {
             if (fiscalNumber == null) return false;
