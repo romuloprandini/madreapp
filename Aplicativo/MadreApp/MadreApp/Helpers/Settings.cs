@@ -22,6 +22,7 @@ namespace MadreApp.Helpers
         private const string _madreCardNumber = "madre_card_number_key";
         private const string _madreCardActive = "madre_card_active_key";
         private const string _madreCardPassword = "madre_card_password_key";
+        private const string _madreCardBalance = "madre_card_balance_key";
 
         #endregion
 
@@ -138,6 +139,18 @@ namespace MadreApp.Helpers
             set
             {
                 AppSettings.AddOrUpdateValue(_madreCardActive, value);
+            }
+        }
+
+        public static string MadreCardBalance
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault(_madreCardBalance, "0");
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue(_madreCardBalance, value);
             }
         }
 
