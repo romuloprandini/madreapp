@@ -40,6 +40,7 @@
     </Compile>
     <Compile Include="Behaviors\FiscalNumberValidator.cs" />
     <Compile Include="Behaviors\PasswordValidator.cs" />
+    <Compile Include="Behaviors\EmailValidator.cs" />
     <Compile Include="Behaviors\PhoneNumberValidator.cs" />
     <Compile Include="Behaviors\Validators.cs" />
     <Compile Include="Converters\BooleanInverter.cs" />

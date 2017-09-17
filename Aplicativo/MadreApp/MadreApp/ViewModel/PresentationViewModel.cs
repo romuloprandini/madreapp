@@ -43,8 +43,9 @@ namespace MadreApp.ViewModel
             {
                 try
                 {
-                    var json = JObject.Parse((string)result);
-                    Settings.Birthday = json["birthday"].ToString();
+                    var json = JObject.Parse(result.ToString());
+                    var date = DateTime.Parse(json["birthday"].ToString());
+                    Settings.Birthday = date.ToString("dd/MM/yyyy");
                     Settings.Email = json["email"].ToString();
                     Settings.Gender = json["gender"].ToString();
                     Settings.Name = json["name"].ToString();
