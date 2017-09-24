@@ -1,13 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MadreApp.Behaviors
 {
     public static class Validators
     {
+        public static bool BirthdayValidator(string birthday)
+        {
+            if (birthday == null || birthday.Length != 10) return false;
+            return DateTime.TryParseExact(birthday, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result);
+        }
+
         public static bool EmailValidator(string email)
         {
             return email != null &&
@@ -19,10 +23,10 @@ namespace MadreApp.Behaviors
 
         public static bool FiscalNumberValidator(string fiscalNumber)
         {
-            if (fiscalNumber == null) return false;
+            if (fiscalNumber == null || fiscalNumber.Length != 14) return false;
 
-            var charArray = fiscalNumber.ToCharArray();
-            var isValid = charArray.Length == 11 && charArray.All(x => char.IsDigit(x)) && !charArray.All(x => x == charArray.First());
+            var charArray = fiscalNumber.Replace(".", "").Replace("-", "").ToCharArray();
+            var isValid = charArray.All(x => char.IsDigit(x)) && !charArray.All(x => x == charArray.First());
 
             if (isValid)
             {
@@ -46,18 +50,18 @@ namespace MadreApp.Behaviors
 
         public static bool PasswordValidator(string password)
         {
-            if (password == null) return false;
-
-            var charArray = password.ToCharArray();
-            return charArray.Length > 7 && !charArray.All(x => x == charArray.First());
+            if (password == null || password.Length < 8) return false;
+            return !password.ToCharArray().All(x => x == password[0]);
         }
 
         public static bool PhoneNumberValidator(string phoneNumber)
         {
-            if (phoneNumber == null) return false;
+            if (phoneNumber == null || phoneNumber.Length != 18) return false;
+            var charArray = phoneNumber.Substring(5).Replace(") ", "").Replace("-", "").ToCharArray();
 
-            var charArray = phoneNumber.ToCharArray();
-            return charArray.Length == 10 && charArray.All(x => char.IsDigit(x)) && !charArray.All(x => x == charArray.First());
+            return charArray[0] != '0' &&                      // Cannot start with zero
+                charArray.All(x => char.IsDigit(x)) &&         // All must be digits
+                !charArray.All(x => x == charArray.First());   // Cannot be all the same digit
         }
     }
 }

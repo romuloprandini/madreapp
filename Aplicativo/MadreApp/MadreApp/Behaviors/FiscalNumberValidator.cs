@@ -4,7 +4,7 @@ namespace MadreApp.Behaviors
 {
     public class FiscalNumberValidator : Behavior<Entry>
     {
-        public static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(PhoneNumberValidator), false);
+        public static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(FiscalNumberValidator), false);
         public static readonly BindableProperty IsValidProperty = IsValidPropertyKey.BindableProperty;
 
         public bool IsValid
@@ -26,18 +26,30 @@ namespace MadreApp.Behaviors
 
         private void Bindable_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var entry = (Entry)sender;
+            var old = e.OldTextValue;
+            var text = e.NewTextValue;
+            var mask = "XXX.XXX.XXX-XX";
 
             // if Entry text is longer then valid length
-            if (entry.Text.Length > 11)
+            if (text.Length > mask.Length)
             {
-                var entryText = entry.Text;
-                entryText = entryText.Remove(entryText.Length - 1);
-                entry.Text = entryText;
+                var index = 0;
+                while (text[index] == old[index] && index < old.Length - 1) index++;
+                text = text.Remove(index + 1);
+            }
+
+            for (var i = 0; i < text.Length - 1; i++)
+            {
+                var maskChar = mask[i];
+                var currChar = text[i];
+                if (currChar == maskChar || maskChar == 'X') continue;
+                var past = text.Substring(0, i);
+                var next = text.Substring(i);
+                text = past + maskChar + next;
             }
 
             IsValid = Validators.FiscalNumberValidator(e.NewTextValue);
-            
+            ((Entry)sender).Text = text;
             ((Entry)sender).TextColor = IsValid ? Color.Default : Color.Red;
         }
     }

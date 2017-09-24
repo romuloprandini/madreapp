@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System.Linq;
+using Xamarin.Forms;
 
 namespace MadreApp.Behaviors
 {
@@ -26,17 +27,30 @@ namespace MadreApp.Behaviors
 
         private void Bindable_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var entry = (Entry)sender;
+            var old = e.OldTextValue;
+            var text = e.NewTextValue;
+            var mask = "+55 (XX) XXXX-XXXX";
 
             // if Entry text is longer then valid length
-            if (entry.Text.Length > 10)
+            if (text.Length > mask.Length)
             {
-                var entryText = entry.Text;
-                entryText = entryText.Remove(entryText.Length - 1);
-                entry.Text = entryText;
+                var index = 0;
+                while (text[index] == old[index] && index < old.Length - 1) index++;
+                text = text.Remove(index + 1);
+            }
+
+            for (var i = 0; i < text.Length - 1; i++)
+            {
+                var maskChar = mask[i];
+                var currChar = text[i];
+                if (currChar == maskChar || maskChar == 'X') continue;
+                var past = text.Substring(0, i);
+                var next = text.Substring(i);
+                text = past + maskChar + next;
             }
 
             IsValid = Validators.PhoneNumberValidator(e.NewTextValue);
+            ((Entry)sender).Text = text;
             ((Entry)sender).TextColor = IsValid ? Color.Default : Color.Red;
         }
     }

@@ -4,7 +4,7 @@ namespace MadreApp.Behaviors
 {
     public class EmailValidator : Behavior<Entry>
     {
-        public static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(PhoneNumberValidator), false);
+        public static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(EmailValidator), false);
         public static readonly BindableProperty IsValidProperty = IsValidPropertyKey.BindableProperty;
 
         public bool IsValid
