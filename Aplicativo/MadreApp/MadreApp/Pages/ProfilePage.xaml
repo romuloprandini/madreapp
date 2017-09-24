@@ -60,6 +60,9 @@
                            Keyboard="Telephone"
                            HorizontalOptions="FillAndExpand"
                            Text="{Binding Birthday}">
+                        <Entry.Behaviors>
+                            <behaviors:BirthdayValidator x:Name="BirthdayValidator"/>
+                        </Entry.Behaviors>
                     </Entry>
                 </StackLayout>
 
@@ -109,6 +112,8 @@
 
                 <Label TextColor="DarkRed" Text="O telefone deve ter 10 números"
                         IsVisible="{Binding Source={x:Reference PhoneNumberValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
+                <Label TextColor="DarkRed" Text="Data de aniversário inválida"
+                        IsVisible="{Binding Source={x:Reference BirthdayValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
                 <Label TextColor="DarkRed" Text="E-mail inválido"
                         IsVisible="{Binding Source={x:Reference EmailValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
                 <Label TextColor="DarkRed" Text="CPF inválido"
