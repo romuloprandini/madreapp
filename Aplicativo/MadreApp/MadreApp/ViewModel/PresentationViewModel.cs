@@ -19,9 +19,9 @@ namespace MadreApp.ViewModel
         private ICommand _onSucessFacebook;
         private IList<DataTemplate> _pages;
 
-        public ICommand MadreCardLoginCommand => _madreCardLoginCommand ?? (_madreCardLoginCommand = new Command(() => Application.Current.MainPage = new MadreCardLoginPage()));
+        public ICommand MadreCardLoginCommand => _madreCardLoginCommand ?? (_madreCardLoginCommand = new Command(() => Application.Current.MainPage = new LoginPage(false)));
 
-        public ICommand NewUserLoginCommand => _newUserLoginCommand ?? (_newUserLoginCommand = new Command(() => Application.Current.MainPage = new NewUserLoginPage()));
+        public ICommand NewUserLoginCommand => _newUserLoginCommand ?? (_newUserLoginCommand = new Command(() => Application.Current.MainPage = new LoginPage(true)));
 
         public ICommand FacebookLoginCommand => _facebookLoginCommand ?? (_facebookLoginCommand = new Command(() => IsBusy = true));
 
@@ -37,26 +37,21 @@ namespace MadreApp.ViewModel
         {
             if (result == null)
             {
-                Application.Current.MainPage?.DisplayAlert("Erro", "Não foi possível logar pelo facebook", "Ok");
+                OnErrorFacebook.Execute(result);
             }
             else
             {
                 try
                 {
-                    var json = JObject.Parse(result.ToString());
-                    var date = DateTime.Parse(json["birthday"].ToString());
-                    Settings.Birthday = date.ToString("dd/MM/yyyy");
-                    Settings.Email = json["email"].ToString();
-                    Settings.Gender = json["gender"].ToString();
-                    Settings.Name = json["name"].ToString();
+                    Settings.Update(JObject.Parse(result.ToString()));                   
+                    IsBusy = false;
                 }
                 catch (Exception)
                 {
-                    Application.Current.MainPage?.DisplayAlert("Erro", "Não foi possível logar pelo facebook", "Ok");
+                    OnErrorFacebook.Execute(result);
                 }
             }
-            IsBusy = false;
-            Application.Current.MainPage = new NewUserLoginPage();
+            Application.Current.MainPage = new LoginPage(true);
         }));
 
         public IList<DataTemplate> Pages
