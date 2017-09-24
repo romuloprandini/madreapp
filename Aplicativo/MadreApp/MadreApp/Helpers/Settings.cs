@@ -1,4 +1,6 @@
 // Helpers/Settings.cs
+using System;
+using Newtonsoft.Json.Linq;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
@@ -23,7 +25,7 @@ namespace MadreApp.Helpers
         private const string _madreCardActive = "madre_card_active_key";
         private const string _madreCardPassword = "madre_card_password_key";
         private const string _madreCardBalance = "madre_card_balance_key";
-
+        
         #endregion
 
         private static ISettings AppSettings
@@ -57,7 +59,7 @@ namespace MadreApp.Helpers
 				AppSettings.AddOrUpdateValue(_nameKey, value);
 			}
 		}
-
+        
         public static string Email
         {
             get
@@ -102,7 +104,7 @@ namespace MadreApp.Helpers
             }
             set
             {
-                AppSettings.AddOrUpdateValue(_fiscalNumber, value);
+                AppSettings.AddOrUpdateValue(_fiscalNumber, value.Replace(".", "").Replace("-", ""));
             }
         }
 
@@ -154,6 +156,51 @@ namespace MadreApp.Helpers
             }
         }
 
+        public static void Update(JObject result)
+        {
+            if (result.TryGetValue("ativo", out JToken value)) MadreCardActive = bool.Parse(value.ToString());
+            if (result.TryGetValue("numero", out value)) MadreCardNumber = value.ToString();
+            if (result.TryGetValue("saldo", out value)) MadreCardBalance = value.ToString();
+            if (result.TryGetValue("cpf", out value)) FiscalNumber = value.ToString();
+            if (result.TryGetValue("nome", out value)) Name = value.ToString().Trim();
+
+            if (result.TryGetValue("email", out value)) Email = value.ToString().Trim();
+            if (result.TryGetValue("gender", out value)) Gender = value.ToString();
+            if (result.TryGetValue("name", out value)) Name = value.ToString().Trim();
+
+            if (result.TryGetValue("birthday", out value))
+            {
+                if (DateTime.TryParse(value.ToString(), out DateTime date))
+                    Birthday = date.ToString("dd/MM/yyyy");
+            }
+        }
+
+        public static object CreateNewUser(string phone, string name, string email, string gender, string birthday, string fiscalNumber, string madreCardPassword)
+        {
+            Phone = phone;
+            Name = name;
+            Email = email;
+            Gender = gender;
+            Birthday = birthday;
+            FiscalNumber = fiscalNumber;
+            MadreCardPassword = madreCardPassword;
+            MadreCardActive = false;
+            MadreCardNumber = string.Empty;
+            MadreCardBalance = "0,00";
+
+            return new { telefone = Phone, nome = Name, email = Email, genero = Gender, nascimento = Birthday, cpf = FiscalNumber, password = MadreCardPassword };
+        }
+
+        internal static string GetAccountInformation()
+        {
+            return (MadreCardActive ? string.Empty : $"Conta inativa! {Environment.NewLine}") +
+                $"Telefone: {Phone}{Environment.NewLine}" +
+                $"Nome: {Name}{Environment.NewLine}" +
+                $"CPF: {FiscalNumber}{Environment.NewLine}" +
+                $"MadreCard: {MadreCardNumber}{Environment.NewLine}" +
+                $"Saldo: R$ {MadreCardBalance}{Environment.NewLine}";
+        }
+        
         public static object Call()
         {
             if (string.IsNullOrWhiteSpace(MadreCardNumber))
