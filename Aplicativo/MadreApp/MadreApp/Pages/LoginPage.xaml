@@ -4,8 +4,7 @@
              x:Class="MadreApp.Pages.LoginPage"
              xmlns:controls="clr-namespace:MadreApp.Customs"
              xmlns:behaviors="clr-namespace:MadreApp.Behaviors"
-             xmlns:converters="clr-namespace:MadreApp.Converters"
-             IsBusy="{Binding IsBusy}">
+             xmlns:converters="clr-namespace:MadreApp.Converters">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:BooleanInverter x:Key="BooleanInverter" />
@@ -20,51 +19,64 @@
                    WidthRequest="80" 
                    HorizontalOptions="Center"
                    VerticalOptions="Center" />
-                <Label Text="Nome" />
-                <Entry Placeholder="Nome" 
-                       HorizontalOptions="FillAndExpand"
-                       Text="{Binding Nome}"/>
 
-                <Label Text="Telefone" />
-                <StackLayout Orientation="Horizontal" 
-                             HorizontalOptions="FillAndExpand">
-                    <Label Text="+55" 
-                           FontAttributes="Bold"
-                           VerticalOptions="Center"/>
-                    <Entry Placeholder="Telefone" 
-                           Keyboard="Telephone"
-                           HorizontalOptions="FillAndExpand"
-                           Text="{Binding Telefone}">
+                <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1"
+                             AbsoluteLayout.LayoutFlags="All">
+                    <Label Text="Telefone" FontAttributes="Bold"/>
+                    <Entry Text="{Binding Phone}"
+                           Placeholder="Introduza o número do seu celular" 
+                           Keyboard="Telephone">
                         <Entry.Behaviors>
-                            <behaviors:MinLengthValidator x:Name="minLenghtValidator"
-                                                          MinLength="10" />
+                            <behaviors:PhoneNumberValidator x:Name="PhoneNumberValidator"/>
                         </Entry.Behaviors>
                     </Entry>
                 </StackLayout>
-                <Label Text="O telefone deve ter no mínimo 10 números" 
-                        TextColor="DarkRed" 
-                        IsVisible="{Binding Source={x:Reference minLenghtValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
-                <Button Text="Entrar" 
-                    Command="{Binding LoginCommand}"/>
 
-                <BoxView Color="LightGray"
-                     HeightRequest="2"
-                     HorizontalOptions="FillAndExpand"
-                     Margin="0,10,10,0" />
+                <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1"
+                             AbsoluteLayout.LayoutFlags="All" 
+                             IsVisible="{Binding IsNewUserLogin}">
+                    <Label Text="Nome" FontAttributes="Bold"/>
+                    <Entry Text="{Binding Name}"
+                           Placeholder="Introduza o seu nome">
+                    </Entry>
+                    <Button Text="Entrar" Command="{Binding NewUserLoginCommand}"/>
+                </StackLayout>
+                
+                <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1"
+                             AbsoluteLayout.LayoutFlags="All" 
+                             IsVisible="{Binding IsMadreCardLogin}">
+                    <Label Text="CPF" FontAttributes="Bold"/>
+                    <Entry Text="{Binding FiscalNumber}"
+                           Placeholder="Introduza o seu CPF"
+                           Keyboard="Telephone">
+                        <Entry.Behaviors>
+                            <behaviors:FiscalNumberValidator x:Name="FiscalNumberValidator"/>
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Label Text="Senha" FontAttributes="Bold"/>
+                    <Entry Text="{Binding MadreCardPassword}"
+                           Placeholder="Introduza a sua senha" 
+                           IsPassword="true">
+                        <Entry.Behaviors>
+                            <behaviors:PasswordValidator x:Name="PasswordValidator" />
+                        </Entry.Behaviors>
+                        </Entry>
+                    <Button Text="Entrar" Command="{Binding MadreCardLoginCommand}"/>
+                </StackLayout>
+                
+                <Label  TextColor="DarkRed" Text="O telefone deve ter no mínimo 10 números"
+                        IsVisible="{Binding Source={x:Reference PhoneNumberValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
+                <Label TextColor="DarkRed" Text="CPF inválido"
+                        IsVisible="{Binding Source={x:Reference FiscalNumberValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
+                <Label TextColor="DarkRed" Text="Senha inválida"
+                        IsVisible="{Binding Source={x:Reference PasswordValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
 
-                <controls:FacebookLoginButton Text="Entrar pelo Facebook" 
-                                          Command="{Binding FacebookLoginCommand}"
-                                          OnSuccess="{Binding OnSucessFacebook}" 
-                                          OnError="{Binding OnErrorFacebook}" 
-                                          OnCancel="{Binding OnCancelFacebook}"
-                                          BackgroundColor="#29487d"
-                                          TextColor="White"/>
             </StackLayout>
             <BoxView IsVisible="{Binding IsBusy}" 
                      BackgroundColor="Black"
                      Opacity=".5"
                      AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                               AbsoluteLayout.LayoutFlags="All" />
+                     AbsoluteLayout.LayoutFlags="All" />
             <ActivityIndicator IsVisible="{Binding IsBusy}" 
                                IsRunning="True"
                                AbsoluteLayout.LayoutBounds=".5, .5, 80, 80"

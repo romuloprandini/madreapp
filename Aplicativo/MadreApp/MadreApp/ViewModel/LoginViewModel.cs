@@ -1,106 +1,123 @@
-﻿using MadreApp.Helpers;
+﻿using MadreApp.Behaviors;
+using MadreApp.Customs;
+using MadreApp.Helpers;
 using MadreApp.Pages;
 using MvvmHelpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using Newtonsoft.Json.Linq;
 
 namespace MadreApp.ViewModel
 {
     public class LoginViewModel : BaseViewModel
     {
-        private string _nome;
-        public string Nome
+        private bool _isNewUserLogin;
+        private string _fiscalNumber;
+        private string _madreCardPassword;
+        private string _name;
+        private string _phone;
+        private ICommand _madreCardLoginCommand;
+        private ICommand _newUserLoginCommand;
+
+        public ICommand MadreCardLoginCommand => _madreCardLoginCommand ?? (_madreCardLoginCommand = new ButtonCommand(() =>
+            {
+                IsBusy = true;
+                Settings.Phone = Phone;
+                Settings.FiscalNumber = FiscalNumber;
+                Settings.MadreCardPassword = MadreCardPassword;
+
+                Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        try
+                        {
+                        var result = await HttpRequest.Instance.GetOneRequest<JObject>("/madrecard/" + Settings.FiscalNumber);
+
+                            Settings.Update(result);
+
+                            await Application.Current.MainPage?.DisplayAlert("Informação da Conta", Settings.GetAccountInformation(), "Ok");
+                            Application.Current.MainPage = new MainPage();
+                        }
+                        catch
+                        {
+                            await Application.Current.MainPage?.DisplayAlert("CPF não encontrado", $"Usuário com CPF {FiscalNumber} não possui conta.", "Ok");
+                            Application.Current.MainPage = new LoginPage(true);
+                        }
+                        IsBusy = false;
+
+                    });              
+            }, CanExecuteMadreCard, this));
+
+        public ICommand NewUserLoginCommand => _newUserLoginCommand ?? (_newUserLoginCommand = new ButtonCommand(() =>
+            {
+                Application.Current.MainPage = new MainPage();
+            }, CanExecuteNewUser, this));
+
+        public LoginViewModel(bool isNewUserLogin)
         {
-            get { return _nome; }
+            _isNewUserLogin = isNewUserLogin;
+            _phone = Settings.Phone;
+            _name = Settings.Name;
+            _fiscalNumber = Settings.FiscalNumber;
+            _madreCardPassword = Settings.MadreCardPassword;
+        }
+
+        public bool IsNewUserLogin => _isNewUserLogin;
+
+        public bool IsMadreCardLogin => !_isNewUserLogin;
+
+        public string FiscalNumber
+        {
+            get { return _fiscalNumber; }
             set
             {
-                if (_nome == value) return;
-                SetProperty(ref _nome, value);
+                if (_fiscalNumber == value) return;
+                SetProperty(ref _fiscalNumber, value);              
             }
         }
 
-        private string _telefone;
-        public string Telefone
+        public string Name
         {
-            get { return _telefone; }
+            get { return _name; }
             set
             {
-                if (_telefone == value) return;
-                SetProperty(ref _telefone, value);
+                if (_name == value) return;
+                SetProperty(ref _name, value);
             }
         }
 
-        private bool Validate()
+        public string Phone
         {
-            if(string.IsNullOrEmpty(_nome) && string.IsNullOrEmpty(_telefone))
+            get { return _phone; }
+            set
             {
-                Application.Current.MainPage?.DisplayAlert("Erro", "Informe o nome e o telefone", "Ok");
-                return false;
+                if (_phone == value) return;
+                SetProperty(ref _phone, value);
             }
-            if (string.IsNullOrEmpty(_nome))
-            {
-                Application.Current.MainPage?.DisplayAlert("Erro", "Informe o nome", "Ok");
-                return false;
-            }
-            if (string.IsNullOrEmpty(_telefone))
-            {
-                Application.Current.MainPage?.DisplayAlert("Erro", "Informe o telefone", "Ok");
-                return false;
-            }
-            if (_telefone.Length < 10)
-            {
-                Application.Current.MainPage?.DisplayAlert("Erro", "O telefone deve ter no mínimo 10 números", "Ok");
-                return false;
-            }
-
-            return true;
         }
 
-        private ICommand _loginCommand;
-        public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new Command(() => {
-            if (!Validate()) return;
-
-            Settings.Nome = _nome;
-            Settings.Telefone = _telefone;
-
-            Application.Current.MainPage = new MainPage();
-        }));
-
-        private ICommand _facebookLoginCommand;
-        public ICommand FacebookLoginCommand => _facebookLoginCommand ?? (_facebookLoginCommand = new Command(() =>
+        public string MadreCardPassword
         {
-            IsBusy = true;
-        }));
-
-        private ICommand _onSucessFacebook;
-        public ICommand OnSucessFacebook => _onSucessFacebook ?? (_onSucessFacebook = new Command(result =>
+            get { return _madreCardPassword; }
+            set
+            {
+                if (_madreCardPassword == value) return;
+                SetProperty(ref _madreCardPassword, value);
+            }
+        }
+        
+        private bool CanExecuteMadreCard()
         {
-            FacebookResult facebookResult = (FacebookResult)result;
+            return IsMadreCardLogin &&
+                Validators.PhoneNumberValidator(Phone) &&
+                Validators.PasswordValidator(MadreCardPassword) &&
+                Validators.FiscalNumberValidator(FiscalNumber);
+        }
 
-            //TODO - Buscar na api as informações do usuário ou buscar no SDK do facebook
-
-            //Settings.Nome = ;
-            //Settings.Telefone = ;
-
-            IsBusy = false;
-        }));
-
-        private ICommand _onErrorFacebook;
-        public ICommand OnErrorFacebook => _onErrorFacebook ?? (_onErrorFacebook = new Command(() =>
+        private bool CanExecuteNewUser()
         {
-            Application.Current.MainPage?.DisplayAlert("Erro", "Não foi possível logar pelo facebook", "Ok");
-            IsBusy = false;
-        }));
-
-        private ICommand _onCancelFacebook;
-        public ICommand OnCancelFacebook => _onCancelFacebook ?? (_onCancelFacebook = new Command(() =>
-        {
-            IsBusy = false;
-        }));
+            return IsNewUserLogin &&
+                !string.IsNullOrWhiteSpace(Name) &&
+                Validators.PhoneNumberValidator(Phone);
+        }
     }
 }
