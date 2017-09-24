@@ -6,5 +6,5 @@
              xmlns:pages="clr-namespace:MadreApp.Pages">
     <pages:CallPage Title="Principal" Icon="ic_home.png"/>
     <pages:ProfilePage Title="Perfil" Icon="ic_friends.png"/>
-    <pages:MadreCardPage Title="MadreCard" Icon="ic_settings.png"/>
+    <pages:SignupPage Title="MadreCard" Icon="ic_settings.png"/>
 </bar:BottomBarPage>
