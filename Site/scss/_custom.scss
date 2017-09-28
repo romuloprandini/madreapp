@@ -1,1 +1,17 @@
 // Here you can add other styles
+.app-header.navbar, .app-header.navbar .navbar-brand  {
+    background-color: #2c507a !important;
+    border-bottom: 1px solid #1b2f46 !important;
+}
+
+.app-header.navbar .navbar-brand  {
+    background-size: 130px auto;
+}
+
+.navbar-nav .nav-link, .navbar-nav .navbar .dropdown-toggle, .navbar .navbar-nav .dropdown-toggle {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.navbar-nav .nav-link:focus, .navbar-nav .navbar .dropdown-toggle:focus, .navbar .navbar-nav .dropdown-toggle:focus, .navbar-nav .nav-link:hover, .navbar-nav .navbar .dropdown-toggle:hover, .navbar .navbar-nav .dropdown-toggle:hover {
+    color: rgba(255, 255, 255, 0.3);
+}

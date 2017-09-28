@@ -120,11 +120,11 @@ class LigacaoPage extends Component {
 
     printLigacaoData() {
         if(this.props.isLoading) {
-            return <tr><td colSpan="3" style={{textAlign:"center"}}><i className="fa fa-refresh fa-spin"></i> Carregando ...</td></tr>;
+            return <tr><td colSpan="5" style={{textAlign:"center"}}><i className="fa fa-refresh fa-spin"></i> Carregando ...</td></tr>;
         }
 
         if(!this.props.isLoading && _.isEmpty(this.props.ligacoes.data)) {
-            return <tr><td colSpan="3" style={{textAlign:"center"}}>Nenhum item encontrado</td></tr>;
+            return <tr><td colSpan="5" style={{textAlign:"center"}}>Nenhum item encontrado</td></tr>;
         }
         return _.map(_.orderBy(this.props.ligacoes.data, 'created_at', 'desc'), ligacao => {
             return (

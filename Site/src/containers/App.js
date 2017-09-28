@@ -52,7 +52,6 @@ class App extends Component {
           </main>
           <Aside />
         </div>
-        <Footer />
       </div>
     )
   }
