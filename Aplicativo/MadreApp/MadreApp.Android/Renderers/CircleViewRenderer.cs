@@ -13,7 +13,7 @@ namespace MadreApp.Droid.Renderers
         {
             base.OnElementChanged(e);
 
-            if (e.NewElement != null)
+            if (e.NewElement != null && Context != null)
             {
                 var view = (Context as Activity).LayoutInflater.Inflate(Resource.Layout.PulseCircle, null, false);
                 SetNativeControl(view);

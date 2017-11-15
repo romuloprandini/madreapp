@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MadreApp.Pages.ProfilePage"
-             xmlns:controls="clr-namespace:MadreApp.Customs"
+             xmlns:customs="clr-namespace:MadreApp.Customs"
              xmlns:behaviors="clr-namespace:MadreApp.Behaviors"
              xmlns:converters="clr-namespace:MadreApp.Converters"
              xmlns:sys="clr-namespace:System;assembly=mscorlib">
@@ -11,130 +11,50 @@
             <converters:BooleanInverter x:Key="BooleanInverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ContentPage.Content>
-        <AbsoluteLayout>
-            <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1"
-                         AbsoluteLayout.LayoutFlags="All" >
-                <Image Source="Icon"
-                   HeightRequest="80"
-                   WidthRequest="80" 
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center" />
+    <ScrollView>
+        <customs:MadreAppLogoView
+            IsBusy="{Binding IsBusy}">
+            <customs:MadreAppLogoView.Source>
+                <StackLayout 
+                    VerticalOptions="Center"
+                    Margin="20,0">
+                    <Label
+                        Text="Perfil" 
+                        FontSize="Large"
+                        HorizontalTextAlignment="Center"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        Margin="0,10"/>
+                    <Label 
+                        Text="Nome:" 
+                        FontAttributes="Bold" />
+                    <Label 
+                        Text="{Binding User.Name}" />
+                    <Label 
+                        Text="Telefone:" 
+                        FontAttributes="Bold" />
+                    <Label 
+                        Text="{Binding User.Phone}" />
+                    <Label 
+                        Text="Email:" 
+                        FontAttributes="Bold" />
+                    <Label 
+                        Text="{Binding User.Email}" />
 
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Nome: " FontAttributes="Bold" VerticalOptions="Center"/>
-                    <Entry Placeholder="Introduza o seu nome" 
-                           Keyboard="Telephone"
-                           HorizontalOptions="FillAndExpand"
-                           Text="{Binding Name}">
-                    </Entry>
+                    <Button 
+                        HorizontalOptions="FillAndExpand"
+                        Text="Editar" 
+                        Command="{Binding EditCommand}"/>
+
+                    <Button 
+                        HorizontalOptions="FillAndExpand"
+                        Text="Sair"
+                        BackgroundColor="{StaticResource Key=BaseErrorColor}"
+                        TextColor="{StaticResource Key=LightTextColor}"
+                        Command="{Binding LogoutCommand}"
+                        Margin="0,20,0,0"/>
                 </StackLayout>
-                
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Telefone: +55" FontAttributes="Bold" VerticalOptions="Center"/>
-                    <Entry Placeholder="Introduza o número do seu celular" 
-                           Keyboard="Telephone"
-                           HorizontalOptions="FillAndExpand"
-                           Text="{Binding Phone}">
-                        <Entry.Behaviors>
-                            <behaviors:PhoneNumberValidator x:Name="PhoneNumberValidator"/>
-                        </Entry.Behaviors>
-                    </Entry>
-                </StackLayout>
-
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="E-mail: " FontAttributes="Bold" VerticalOptions="Center"/>
-                    <Entry Placeholder="Introduza o seu e-mail" 
-                           Keyboard="Email"
-                           HorizontalOptions="FillAndExpand"
-                           Text="{Binding Email}">
-                        <Entry.Behaviors>
-                            <behaviors:EmailValidator x:Name="EmailValidator"/>
-                        </Entry.Behaviors>
-                    </Entry>
-                </StackLayout>
-
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Nascimento: " FontAttributes="Bold" VerticalOptions="Center"/>
-                    <Entry Placeholder="Introduza a data do seu nascimento" 
-                           Keyboard="Telephone"
-                           HorizontalOptions="FillAndExpand"
-                           Text="{Binding Birthday}">
-                        <Entry.Behaviors>
-                            <behaviors:BirthdayValidator x:Name="BirthdayValidator"/>
-                        </Entry.Behaviors>
-                    </Entry>
-                </StackLayout>
-
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="CPF:" FontAttributes="Bold" VerticalOptions="Center"/>
-                    <Entry Placeholder="Introduza a data do seu nascimento" 
-                           Keyboard="Telephone"
-                           HorizontalOptions="FillAndExpand"
-                           Text="{Binding FiscalNumber}">
-                        <Entry.Behaviors>
-                            <behaviors:FiscalNumberValidator x:Name="FiscalNumberValidator"/>
-                        </Entry.Behaviors>
-                    </Entry>
-                </StackLayout>
-
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="MadreCard:" FontAttributes="Bold" VerticalOptions="Center"/>
-                    <Entry Placeholder="Faça login" 
-                           HorizontalOptions="FillAndExpand"
-                           IsEnabled="False"
-                           Text="{Binding MadreCardNumber}">
-                    </Entry>
-                </StackLayout>
-
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Saldo: R$" FontAttributes="Bold" VerticalOptions="Center"/>
-                    <Entry Placeholder="0,00" 
-                           HorizontalOptions="FillAndExpand"
-                           IsEnabled="False"
-                           Text="{Binding MadreCardBalance}">
-                    </Entry>
-                </StackLayout>
-
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <Label Text="Senha" FontAttributes="Bold" VerticalOptions="Center"/>
-                    <Entry Placeholder="Introduza a sua senha" 
-                           IsPassword="true"
-                           HorizontalOptions="FillAndExpand"
-                           Text="{Binding Password}">
-                        <Entry.Behaviors>
-                            <behaviors:PasswordValidator x:Name="PasswordValidator" />
-                        </Entry.Behaviors>
-                    </Entry>
-                </StackLayout>
-
-                <Button Text="Entrar" Command="{Binding MadreCardLoginCommand}"/>
-
-                <Label TextColor="DarkRed" Text="O telefone deve ter 10 números"
-                        IsVisible="{Binding Source={x:Reference PhoneNumberValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
-                <Label TextColor="DarkRed" Text="Data de aniversário inválida"
-                        IsVisible="{Binding Source={x:Reference BirthdayValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
-                <Label TextColor="DarkRed" Text="E-mail inválido"
-                        IsVisible="{Binding Source={x:Reference EmailValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
-                <Label TextColor="DarkRed" Text="CPF inválido"
-                        IsVisible="{Binding Source={x:Reference FiscalNumberValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
-                <Label TextColor="DarkRed" Text="Senha inválida"
-                        IsVisible="{Binding Source={x:Reference PasswordValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
-
-                <BoxView Color="LightGray"
-                     HeightRequest="2"
-                     HorizontalOptions="FillAndExpand"
-                     Margin="0,10,10,0" />
-            </StackLayout>
-            <BoxView IsVisible="{Binding IsBusy}" 
-                     BackgroundColor="Black"
-                     Opacity=".5"
-                     AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
-                               AbsoluteLayout.LayoutFlags="All" />
-            <ActivityIndicator IsVisible="{Binding IsBusy}" 
-                               IsRunning="True"
-                               AbsoluteLayout.LayoutBounds=".5, .5, 80, 80"
-                               AbsoluteLayout.LayoutFlags="PositionProportional" />
-        </AbsoluteLayout>
-    </ContentPage.Content>
+            </customs:MadreAppLogoView.Source>
+        </customs:MadreAppLogoView>
+    </ScrollView>
 </ContentPage>

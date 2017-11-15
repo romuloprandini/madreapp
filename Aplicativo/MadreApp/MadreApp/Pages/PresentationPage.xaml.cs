@@ -8,11 +8,14 @@ namespace MadreApp.Pages
     public partial class PresentationPage : ContentPage
     {
         PresentationViewModel _viewModel;
-        public PresentationPage()
+        public PresentationPage(int position = 0)
         {
             InitializeComponent();
 
-            BindingContext = _viewModel = new PresentationViewModel();
+            BindingContext = _viewModel = new PresentationViewModel
+            {
+                Position = position
+            };
         }
     }
 }

@@ -4,7 +4,9 @@ namespace MadreApp.Behaviors
 {
     public class FiscalNumberValidator : Behavior<Entry>
     {
-        public static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(FiscalNumberValidator), false);
+        private Color defaultColor;
+
+        public static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(FiscalNumberValidator), true);
         public static readonly BindableProperty IsValidProperty = IsValidPropertyKey.BindableProperty;
 
         public bool IsValid
@@ -17,6 +19,8 @@ namespace MadreApp.Behaviors
         {
             IsValid = true;
             bindable.TextChanged += Bindable_TextChanged;
+
+            defaultColor = bindable.TextColor;
         }
         
         protected override void OnDetachingFrom(Entry bindable)
@@ -50,7 +54,7 @@ namespace MadreApp.Behaviors
 
             IsValid = Validators.FiscalNumberValidator(e.NewTextValue);
             ((Entry)sender).Text = text;
-            ((Entry)sender).TextColor = IsValid ? Color.Default : Color.Red;
+            ((Entry)sender).TextColor = IsValid ? defaultColor : Color.Red;
         }
     }
 }

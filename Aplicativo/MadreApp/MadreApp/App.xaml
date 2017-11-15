@@ -2,7 +2,24 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MadreApp.App">
-	<Application.Resources>
-        <!--  -->
+    <Application.Resources>
+        <ResourceDictionary>
+            <!-- Base colors -->
+            <Color x:Key="BlueBackgroundColor">#2f527d</Color>
+
+            <!-- Base font colors -->
+            <Color x:Key="BaseSubtitleTextColor">#7c7c7c</Color>
+            <Color x:Key="DarkTextColor">Black</Color>
+            <Color x:Key="LightTextColor">#ebebeb</Color>
+            <Color x:Key="ErrorTextColor">#ff4500</Color>
+            <Color x:Key="BaseSuccessColor">#9acd32</Color>
+            <Color x:Key="BaseInfoColor">#20b2aa</Color>
+            <Color x:Key="BaseErrorColor">#e50000</Color>
+
+            <!-- Explicit Style -->
+            <Style TargetType="Label">
+                <Setter Property="FontFamily" Value="Droid Sans Mono" />
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

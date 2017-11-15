@@ -56,8 +56,8 @@ namespace MadreApp.Behaviors
 
         public static bool PhoneNumberValidator(string phoneNumber)
         {
-            if (phoneNumber == null || phoneNumber.Length != 18) return false;
-            var charArray = phoneNumber.Substring(5).Replace(") ", "").Replace("-", "").ToCharArray();
+            if (phoneNumber == null || phoneNumber.Length != 19) return false;
+            var charArray = phoneNumber.Substring(5).Replace(") ", "").Replace("-", "").Replace(" ", "").ToCharArray();
 
             return charArray[0] != '0' &&                      // Cannot start with zero
                 charArray.All(x => char.IsDigit(x)) &&         // All must be digits

@@ -19,7 +19,7 @@ class Usuario extends Model
      * @var array
      */
     protected $fillable = [
-        'nome', 'email', 'telefone', 'cpf', 'password', 'nascimento', 'avatar'
+        'nome', 'telefone', 'email', 'cpf', 'madrecard', 'password', 'nascimento', 'avatar'
     ];
 
     /**

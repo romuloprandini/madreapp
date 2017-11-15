@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:customs="clr-namespace:MadreApp.Customs"
+             x:Class="MadreApp.Pages.CompleteRegisterPage">
+    <customs:MadreAppLogoView
+        IsBusy="{Binding IsBusy}">
+        <customs:MadreAppLogoView.Source>
+            <StackLayout 
+                VerticalOptions="Center"
+                Margin="20,0">
+                <Label
+                    Text="Complete seu Cadastro" 
+                    FontSize="Large"
+                    HorizontalTextAlignment="Center"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    Margin="0,10"/>
+                <Label 
+                    Text="Para ter acesso a todas as funcionalidades do Madre App é preciso completar seu cadastro" 
+                    FontSize="Medium"
+                    HorizontalTextAlignment="Center"/>
+                <Button
+                    Text="Completar"
+                    Command="{Binding RegisterCommand}" 
+                    HorizontalOptions="FillAndExpand" />
+                <Label 
+                    Text="Ou faça seu login aqui" 
+                    FontSize="Medium"
+                    HorizontalTextAlignment="Center"/>
+                <Button
+                    Text="Entrar"
+                    Command="{Binding LoginCommand}" 
+                    HorizontalOptions="FillAndExpand" />
+            </StackLayout>
+        </customs:MadreAppLogoView.Source>
+    </customs:MadreAppLogoView>
+</ContentPage>

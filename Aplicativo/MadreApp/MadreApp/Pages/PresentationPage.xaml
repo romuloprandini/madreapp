@@ -3,19 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MadreApp.Pages.PresentationPage"
              xmlns:carousel="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
-             IsBusy="{Binding IsBusy}" >
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style TargetType="ContentPage" ApplyToDerivedTypes="true">
-                <Setter Property="BackgroundImage" Value="PresentationBackground.jpg" />
-            </Style>
-        </ResourceDictionary>
-    </ContentPage.Resources>
+             IsBusy="{Binding IsBusy}" 
+             BackgroundColor="{StaticResource Key=BlueBackgroundColor}">
     <ContentPage.Content>
         <AbsoluteLayout>
             <carousel:CarouselViewControl 
-                    AbsoluteLayout.LayoutBounds="0,0,1,1"
-                    AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
             Orientation="Horizontal"
             InterPageSpacing="0"
             Position="{Binding Position}" 

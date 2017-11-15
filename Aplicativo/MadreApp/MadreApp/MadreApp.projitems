@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>88cf870f-0a8b-4edb-9984-735a0314e04a</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>MadreApp</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\BirthdayValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\ComparisonBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\EmailValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\FiscalNumberValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\MaxLengthValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\MinLengthValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\PasswordValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\RequiredValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\PhoneNumberValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\Validators.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanInverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Customs\ButtonCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Customs\CircleView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Customs\CirularProgressBar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Customs\FacebookLoginButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Customs\MadreAppLogoView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Customs\TouchableImage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FacebookResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\HttpRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\CrossLogin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ObservableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\ObservableRangeCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ILogin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\CallPage.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\CompleteRegisterPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\FullRegisterPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\LoginPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\PhoneRegisterPage.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\MainPage.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\PresentationTemplateView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\PresentationLoginView.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\PresentationPage.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\ProfilePage.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\ValidatePhonePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\BaseNavigationViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\BaseViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\CallViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\CompleteRegisterViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\FullRegisterViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\PhoneRegisterViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\LoginViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\MainViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\MessageKeys.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\MessagingCenterChoice.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\MessengingCenterAlert.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\MessengingCenterQuestion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\PresentationLoginViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\PresentationViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\ProfileViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel\ValidatePhoneViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\CallPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\PhoneRegisterPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\MainPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\PresentationLoginView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\PresentationPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\ProfilePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\ValidatePhonePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\LoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\CompleteRegisterPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\FullRegisterPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

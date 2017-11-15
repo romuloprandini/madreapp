@@ -9,9 +9,10 @@ namespace MadreApp.Behaviors
 {
     public class MinLengthValidator : Behavior<Entry>
     {
+        private Color defaultColor;
         public static readonly BindableProperty MinLengthProperty = BindableProperty.Create("MinLength", typeof(int), typeof(MinLengthValidator), 0);
 
-        static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(MinLengthValidator), false);
+        static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(MinLengthValidator), true);
         public static readonly BindableProperty IsValidProperty = IsValidPropertyKey.BindableProperty;
 
         public int MinLength
@@ -31,6 +32,7 @@ namespace MadreApp.Behaviors
             IsValid = true;
 
             bindable.TextChanged += bindable_TextChanged;
+            defaultColor = bindable.TextColor;
         }
 
         private void bindable_TextChanged(object sender, TextChangedEventArgs e)
@@ -38,14 +40,13 @@ namespace MadreApp.Behaviors
             IsValid = e.NewTextValue.Length < 1 || e.NewTextValue.Length >= MinLength;
             if(!IsValid)
             {
-                ((Entry)sender).TextColor = IsValid ? Color.Default : Color.Red;
+                ((Entry)sender).TextColor = IsValid ? defaultColor : Color.Red;
             }
         }
 
         protected override void OnDetachingFrom(Entry bindable)
         {
             bindable.TextChanged -= bindable_TextChanged;
-
         }
     }
 }

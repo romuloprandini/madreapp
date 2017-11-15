@@ -1,6 +1,7 @@
-﻿using MadreApp.Helpers;
+﻿using System;
 using MadreApp.Pages;
 using Xamarin.Forms;
+using MadreApp.Helpers;
 
 namespace MadreApp
 {
@@ -10,14 +11,55 @@ namespace MadreApp
         {
             InitializeComponent();
 
-            if (true)//string.IsNullOrEmpty(Settings.Name))
-            {
-                MainPage = new PresentationPage();
-            }
-            else
+            ConfigureMessageService();
+
+            if (CrossLogin.Instance.IsLogged)
             {
                 MainPage = new MainPage();
             }
+            else
+            {
+                MainPage = new PresentationPage();
+            }
+        }
+
+        private void ConfigureMessageService()
+        {
+            MessagingCenter.Subscribe<MessagingCenterAlert>(this, MessageKeys.DisplayAlert, (info) =>
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    var task = Current?.MainPage?.DisplayAlert(info.Title, info.Message, info.Cancel);
+                    if (task == null) return;
+
+                    await task;
+                    info.OnCompleted?.Invoke();
+                });
+            });
+
+            MessagingCenter.Subscribe<MessagingCenterQuestion>(this, MessageKeys.DisplayQuestion, (info) =>
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    var task = Current?.MainPage?.DisplayAlert(info.Title, info.Question, info.Positive, info.Negative);
+                    if (task == null) return;
+
+                    var result = await task;
+                    info.OnCompleted?.Invoke(result);
+                });
+            });
+
+            MessagingCenter.Subscribe<MessagingCenterChoice>(this, MessageKeys.DisplayChoice, (info) =>
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    var task = Current?.MainPage?.DisplayActionSheet(info.Title, info.Cancel, info.Destruction, info.Items);
+                    if (task == null) return;
+
+                    var result = await task;
+                    info.OnCompleted?.Invoke(result);
+                });
+            });
         }
     }
 }

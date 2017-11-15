@@ -9,52 +9,51 @@
             <converters:BooleanInverter x:Key="BooleanInverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ContentPage.Content>
-        <RelativeLayout
-                AbsoluteLayout.LayoutBounds=".5,.7,140,140"
-                AbsoluteLayout.LayoutFlags="PositionProportional"
-                HorizontalOptions="FillAndExpand"
-                VerticalOptions="FillAndExpand">
-            <customs:CircleView x:Name="image2"
-                                HeightRequest="140"
-                                WidthRequest="140"
-                                IsVisible="{Binding IsProgressVisible, Converter={StaticResource BooleanInverter}}"
-                                            RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView, ElementName=phoneImage, Property=X, Factor=1, Constant=-10 }"
-                                            RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=phoneImage, Property=Y, Factor=1, Constant=-10 }" />
-            <customs:CircleView x:Name="image"
-                                 Opacity=".6" 
-                                HeightRequest="140"
-                                WidthRequest="140"
-                                IsVisible="{Binding IsProgressVisible, Converter={StaticResource BooleanInverter}}"
-                                            RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView, ElementName=phoneImage, Property=X, Factor=1, Constant=-10 }"
-                                            RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=phoneImage, Property=Y, Factor=1, Constant=-10 }" />
+    <customs:MadreAppLogoView
+        IsBusy="{Binding IsBusy}">
+        <customs:MadreAppLogoView.Source>
+            <AbsoluteLayout             
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
+                <Image
+                x:Name="backgroundImage"
+                Source="foto_tela_ligar"
+                Aspect="AspectFill"
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All" />
 
-            <customs:CirularProgressBar Progress="{Binding Progress}"
-                                        IsVisible="{Binding IsProgressVisible}"
-                                            RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView, ElementName=phoneImage, Property=X, Factor=1, Constant=-14 }"
-                                            RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=phoneImage, Property=Y, Factor=1, Constant=-14 }"
-                                            RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToView, ElementName=phoneImage, Property=Width, Factor=1, Constant=28 }"
-                                            RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToView, ElementName=phoneImage, Property=Height, Factor=1, Constant=28 }"/>
-            <customs:TouchableImage x:Name="phoneImage"
-                                    Source="phone" 
-                                    OnTouchStartCommand="{Binding OnTouchStartCommand}"
-                                    OnTouchEndCommand="{Binding OnTouchEndCommand}"
-                                    HeightRequest="120"
-                                    WidthRequest="120"
-                                    RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=.5, Constant=-60 }"
-                                    RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1, Constant=-200 }" />
-            <BoxView IsVisible="{Binding IsBusy}" 
-                     BackgroundColor="Black"
-                     Opacity=".5"
-                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
-                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1 }"  />
-            <ActivityIndicator IsVisible="{Binding IsBusy}" 
-                               IsRunning="True"
-                               HeightRequest="80"
-                               WidthRequest="80"
-                               RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=.5, Constant=-40}"
-                               RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=.5, Constant=-40 }"  />
-
-        </RelativeLayout>
-    </ContentPage.Content>
+                <customs:CircleView 
+                x:Name="image2"
+                IsVisible="{Binding IsProgressVisible, Converter={StaticResource BooleanInverter}}" 
+                AbsoluteLayout.LayoutBounds=".5,.5,120,120"
+                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                <customs:CircleView 
+                    x:Name="image"
+                    Opacity=".6" 
+                    IsVisible="{Binding IsProgressVisible, Converter={StaticResource BooleanInverter}}" 
+                    AbsoluteLayout.LayoutBounds=".5,.5,90,90"
+                    AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                <customs:CirularProgressBar 
+                    Progress="{Binding Progress}"
+                    IsVisible="{Binding IsProgressVisible}"
+                    AbsoluteLayout.LayoutBounds=".5,.5,.4,.4"
+                    AbsoluteLayout.LayoutFlags="All"/>
+                <customs:TouchableImage 
+                    OnTouchStartCommand="{Binding OnTouchStartCommand}"
+                    OnTouchEndCommand="{Binding OnTouchEndCommand}"
+                    x:Name="phoneImage"
+                    Source="phone" 
+                    AbsoluteLayout.LayoutBounds=".5,.5,.3,.3"
+                    AbsoluteLayout.LayoutFlags="All" />
+                <Label
+                Text="Pressione o Botão por 5 segundos para ser atendido"
+                TextColor="{StaticResource Key=BlueBackgroundColor}"
+                FontSize="Medium"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"
+                AbsoluteLayout.LayoutBounds="0,1,1,.2"
+                AbsoluteLayout.LayoutFlags="All" />
+            </AbsoluteLayout>
+        </customs:MadreAppLogoView.Source>
+    </customs:MadreAppLogoView>
 </ContentPage>

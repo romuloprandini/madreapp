@@ -2,122 +2,139 @@
 using MadreApp.Customs;
 using MadreApp.Helpers;
 using MadreApp.Pages;
-using MvvmHelpers;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Diagnostics;
 using System.Windows.Input;
 using Xamarin.Forms;
-using Newtonsoft.Json.Linq;
 
 namespace MadreApp.ViewModel
 {
-    public class LoginViewModel : BaseViewModel
+    public class LoginViewModel : BaseNavigationViewModel
     {
-        private bool _isNewUserLogin;
-        private string _fiscalNumber;
-        private string _madreCardPassword;
-        private string _name;
-        private string _phone;
-        private ICommand _madreCardLoginCommand;
-        private ICommand _newUserLoginCommand;
+        private string _email;
+        private string _password;
+        private ICommand _loginCommand;
+        private ICommand _facebookLoginCommand;
+        private ICommand _facebookSuccessCommand;
+        private ICommand _facebookErrorCommand;
+        private ICommand _facebookCancelCommand;
+        private ICommand _backCommand;
 
-        public ICommand MadreCardLoginCommand => _madreCardLoginCommand ?? (_madreCardLoginCommand = new ButtonCommand(() =>
+        public LoginViewModel()
+        {
+            IsBusy = false;
+        }
+
+        public string Email
+        {
+            get { return _email; }
+            set
             {
-                IsBusy = true;
-                Settings.Phone = Phone;
-                Settings.FiscalNumber = FiscalNumber;
-                Settings.MadreCardPassword = MadreCardPassword;
+                if (_email == value) return;
+                SetProperty(ref _email, value);
+            }
+        }
 
-                Device.BeginInvokeOnMainThread(async () =>
+        public string Password
+        {
+            get { return _password; }
+            set
+            {
+                if (_password == value) return;
+                SetProperty(ref _password, value);
+            }
+        }
+
+        public ICommand BackCommand => _backCommand ?? (_backCommand = new Command(ExecuteBackCommand));
+        public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new ButtonCommand(ExecuteLoginCommand, ValidateLoginCommand, this));
+        public ICommand FacebookLoginCommand => _facebookLoginCommand ?? (_facebookLoginCommand = new Command(() => IsBusy = true));
+        public ICommand FacebookSuccessCommand => _facebookSuccessCommand ?? (_facebookSuccessCommand = new Command(ExecuteFacebookSuccessCommand));
+        public ICommand FacebookErrorCommand => _facebookErrorCommand ?? (_facebookErrorCommand = new Command(ExecuteFacebookErrorCommand));
+        public ICommand FacebookCancelCommand => _facebookCancelCommand ?? (_facebookCancelCommand = new Command(() => IsBusy = false));
+
+        private async void ExecuteBackCommand()
+        {
+            if (Application.Current.MainPage is MainPage)
+            {
+                var mainPage = Application.Current.MainPage as BottomBar.XamarinForms.BottomBarPage;
+                await mainPage.CurrentPage.Navigation.PopAsync(true);
+            }
+            else
+            {
+                Application.Current.MainPage = new PresentationPage(3);
+            }
+        }
+
+        private async void ExecuteLoginCommand()
+        {
+            IsBusy = true;
+            try
+            {
+                if (await CrossLogin.Instance.Login(_email, _password))
+                {
+                    Settings.Email = _email;
+                    Application.Current.MainPage = new MainPage();
+                }
+                else
+                {
+                    MessagingCenter.Send(new MessagingCenterAlert
                     {
-                        try
-                        {
-                        var result = await HttpRequest.Instance.GetOneRequest<JObject>("/madrecard/" + Settings.FiscalNumber);
-
-                            Settings.Update(result);
-
-                            await Application.Current.MainPage?.DisplayAlert("Informação da Conta", Settings.GetAccountInformation(), "Ok");
-                            Application.Current.MainPage = new MainPage();
-                        }
-                        catch
-                        {
-                            await Application.Current.MainPage?.DisplayAlert("CPF não encontrado", $"Usuário com CPF {FiscalNumber} não possui conta.", "Ok");
-                            Application.Current.MainPage = new LoginPage(true);
-                        }
-                        IsBusy = false;
-
-                    });              
-            }, CanExecuteMadreCard, this));
-
-        public ICommand NewUserLoginCommand => _newUserLoginCommand ?? (_newUserLoginCommand = new ButtonCommand(() =>
-            {
-                Application.Current.MainPage = new MainPage();
-            }, CanExecuteNewUser, this));
-
-        public LoginViewModel(bool isNewUserLogin)
-        {
-            _isNewUserLogin = isNewUserLogin;
-            _phone = Settings.Phone;
-            _name = Settings.Name;
-            _fiscalNumber = Settings.FiscalNumber;
-            _madreCardPassword = Settings.MadreCardPassword;
-        }
-
-        public bool IsNewUserLogin => _isNewUserLogin;
-
-        public bool IsMadreCardLogin => !_isNewUserLogin;
-
-        public string FiscalNumber
-        {
-            get { return _fiscalNumber; }
-            set
-            {
-                if (_fiscalNumber == value) return;
-                SetProperty(ref _fiscalNumber, value);              
+                        Title = "Erro",
+                        Message = "Não foi possível fazer login, verifique o email e senha informados",
+                        Cancel = "Ok"
+                    }, MessageKeys.DisplayAlert);
+                }
             }
-        }
-
-        public string Name
-        {
-            get { return _name; }
-            set
+            catch(Exception ex)
             {
-                if (_name == value) return;
-                SetProperty(ref _name, value);
+                Debug.WriteLine(ex.Message);
+
+                MessagingCenter.Send(new MessagingCenterAlert
+                {
+                    Title = "Erro",
+                    Message = "Não foi possível fazer login, verifique o email e senha informados",
+                    Cancel = "Ok"
+                }, MessageKeys.DisplayAlert);
             }
+            IsBusy = false;
         }
 
-        public string Phone
+        private void ExecuteFacebookSuccessCommand(object result)
         {
-            get { return _phone; }
-            set
+            if (result == null)
             {
-                if (_phone == value) return;
-                SetProperty(ref _phone, value);
+                ExecuteFacebookErrorCommand();
             }
-        }
-
-        public string MadreCardPassword
-        {
-            get { return _madreCardPassword; }
-            set
+            else
             {
-                if (_madreCardPassword == value) return;
-                SetProperty(ref _madreCardPassword, value);
+                try
+                {
+                    Settings.Update(JObject.Parse(result.ToString()));
+                    IsBusy = false;
+                }
+                catch (Exception ex)
+                {
+                    ExecuteFacebookErrorCommand();
+                }
             }
-        }
-        
-        private bool CanExecuteMadreCard()
-        {
-            return IsMadreCardLogin &&
-                Validators.PhoneNumberValidator(Phone) &&
-                Validators.PasswordValidator(MadreCardPassword) &&
-                Validators.FiscalNumberValidator(FiscalNumber);
+            Application.Current.MainPage = new MainPage();
         }
 
-        private bool CanExecuteNewUser()
+        private void ExecuteFacebookErrorCommand()
         {
-            return IsNewUserLogin &&
-                !string.IsNullOrWhiteSpace(Name) &&
-                Validators.PhoneNumberValidator(Phone);
+            MessagingCenter.Send(new MessagingCenterAlert
+            {
+                Title = "Erro",
+                Message = "Não foi possível logar pelo facebook",
+                Cancel = "Ok"
+            }, MessageKeys.DisplayAlert);
+            IsBusy = false;
+        }
+
+        private bool ValidateLoginCommand()
+        {
+            return Validators.EmailValidator(_email) && Validators.PasswordValidator(_password);
         }
     }
 }

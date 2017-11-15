@@ -16,7 +16,7 @@ namespace MadreApp.Pages
         CallViewModel _viewModel;
 		public CallPage ()
 		{
-			InitializeComponent ();
+			InitializeComponent();
 
             BindingContext = _viewModel = new CallViewModel();
             

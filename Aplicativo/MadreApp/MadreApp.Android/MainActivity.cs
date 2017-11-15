@@ -3,13 +3,13 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using CarouselView.FormsPlugin.Android;
+using MadreApp.Helpers;
 using Xamarin.Facebook;
-using Xamarin.Facebook.AppEvents;
 
 [assembly: MetaData("com.facebook.sdk.ApplicationId", Value = "@string/app_id")]
 namespace MadreApp.Droid
 {
-    [Activity(Label = "@string/app_name", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "@string/app_name", Icon = "@drawable/icon", Theme = "@style/MainTheme", ScreenOrientation = ScreenOrientation.SensorPortrait, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
 
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
@@ -22,9 +22,8 @@ namespace MadreApp.Droid
 
             base.OnCreate(bundle);
 
-            FacebookSdk.SdkInitialize(this);
-            AppEventsLogger.ActivateApp(this);
-            
+            CrossLogin.Initialize();
+
             Xamarin.Forms.Forms.Init(this, bundle);
             CarouselViewRenderer.Init();
 
@@ -40,6 +39,23 @@ namespace MadreApp.Droid
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
             Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+            CrossLogin.Dispose();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            CrossLogin.Initialize();
         }
     }
 }

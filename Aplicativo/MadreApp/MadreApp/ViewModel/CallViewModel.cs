@@ -1,5 +1,5 @@
 ﻿using MadreApp.Helpers;
-using MvvmHelpers;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,10 +50,15 @@ namespace MadreApp.ViewModel
                     IsBusy = true;
                     Device.BeginInvokeOnMainThread(async () =>
                     {
-                        var result = await HttpRequest.Instance.PostRequest<object>("/ligacao",  Settings.Call());
-                        
+                        var user = CrossLogin.Instance.LoggedUser;
+                        var result = await HttpRequest.Instance.PostRequest<object>("/ligacao", user);
+                        MessagingCenter.Send(new MessagingCenterAlert
+                        {
+                            Title = "Sucesso",
+                            Message = "Aguarde que em alguns minutos ligaremos para você \n Seu número: " + user.Phone,
+                            Cancel = "Ok"
+                        }, MessageKeys.DisplayAlert);
                         IsBusy = false;
-                        await Application.Current.MainPage.DisplayAlert("Sucesso", "Aguarde que em alguns minutos ligaremos para você \n Seu número: " + Settings.Phone, "Ok");
                     });
                 }
                 return isPressed;

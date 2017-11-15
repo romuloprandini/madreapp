@@ -5,7 +5,9 @@ namespace MadreApp.Behaviors
 {
     public class PhoneNumberValidator : Behavior<Entry>
     {
-        public static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(PhoneNumberValidator), false);
+        private Color defaultColor;
+
+        public static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(PhoneNumberValidator), true);
         public static readonly BindableProperty IsValidProperty = IsValidPropertyKey.BindableProperty;
 
         public bool IsValid
@@ -18,6 +20,8 @@ namespace MadreApp.Behaviors
         {
             IsValid = true;
             bindable.TextChanged += Bindable_TextChanged;
+
+            defaultColor = bindable.TextColor;
         }
 
         protected override void OnDetachingFrom(Entry bindable)
@@ -29,7 +33,7 @@ namespace MadreApp.Behaviors
         {
             var old = e.OldTextValue;
             var text = e.NewTextValue;
-            var mask = "+55 (XX) XXXX-XXXX";
+            var mask = "+55 (XX) XXXXX-XXXX";
 
             // if Entry text is longer then valid length
             if (text.Length > mask.Length)
@@ -51,7 +55,7 @@ namespace MadreApp.Behaviors
 
             IsValid = Validators.PhoneNumberValidator(e.NewTextValue);
             ((Entry)sender).Text = text;
-            ((Entry)sender).TextColor = IsValid ? Color.Default : Color.Red;
+            ((Entry)sender).TextColor = IsValid ? defaultColor : Color.Red;
         }
     }
 }

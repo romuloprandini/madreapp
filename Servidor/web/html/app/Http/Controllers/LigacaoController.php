@@ -12,8 +12,7 @@ class LigacaoController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         //
     }
 	
@@ -42,10 +41,12 @@ class LigacaoController extends Controller
 							 ->count();
 							 
 		return response()->json(['count' => $conta_ligacoes]);
-    }
+	}
+	
 	public function show(IRequest $request, $id) {
 		return Ligacao::findOrFail($id);
 	}
+
 	public function store(Request $request) {
 		$this->validate($request, [
 			'nome' => 'required',
@@ -66,6 +67,7 @@ class LigacaoController extends Controller
 		
 		return $ligacao;
 	}
+	
 	public function update(Illuminate\Http\Request $request, $id) {
 		$this->validate($request, [
 			'retorno' => 'required',

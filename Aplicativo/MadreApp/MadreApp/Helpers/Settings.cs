@@ -34,7 +34,7 @@ namespace MadreApp.Helpers
 			{
 				return CrossSettings.Current;
 			}
-		}
+        }
         
         public static string Phone
         {

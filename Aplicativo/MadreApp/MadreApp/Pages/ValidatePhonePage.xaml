@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MadreApp.Pages.ValidatePhonePage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <StackLayout
+            VerticalOptions="FillAndExpand"
+            HorizontalOptions="FillAndExpand"
+            Padding="10,20">
+            <Label 
+                HorizontalOptions="Center"
+                Text="Verificar Código"
+                FontSize="24"
+                FontAttributes="Bold"
+                Margin="0,0,0,20"/>
+            <Label
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                TextColor="DarkGray"
+                Text="Em até 1 minuto você receberá um código por SMS no número de celular informado"
+                FontSize="Small">
+            </Label>
+            <Entry
+                Text="{Binding CodeSMS}"
+                Placeholder="Código SMS"
+                FontSize="Large" 
+                Margin="0,20,0,10"/>
+            <Button
+                Text="Validar"
+                HorizontalOptions="FillAndExpand" 
+                Command="{Binding ValidadeCodeSMSCommand}"/>
+            <Label
+                HorizontalTextAlignment="Center"
+                Text="Caso não tenha recebido um código de confirmação clique abaixo" 
+                VerticalOptions="EndAndExpand" />
+            <Label
+                Text="Reenviar SMS" 
+                TextColor="Gray"
+                VerticalOptions="End"
+                HorizontalOptions="CenterAndExpand">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="ResendSMSCommand" />
+                </Label.GestureRecognizers>
+            </Label>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

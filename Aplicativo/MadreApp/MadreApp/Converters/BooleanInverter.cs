@@ -20,6 +20,5 @@ namespace MadreApp.Converters
             return !(bool)value;
         }
         #endregion
-
     }
 }

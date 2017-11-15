@@ -4,9 +4,10 @@ namespace MadreApp.Behaviors
 {
     public class ComparisonBehavior : Behavior<Entry>
     {
+        private Color defaultColor;
         private Entry _thisEntry;
         public static readonly BindableProperty CompareToEntryProperty = BindableProperty.Create("CompareToEntry", typeof(Entry), typeof(ComparisonBehavior), null);
-        public static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(ComparisonBehavior), false);
+        public static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(ComparisonBehavior), true);
         public static readonly BindableProperty IsValidProperty = IsValidPropertyKey.BindableProperty;
         
         public bool IsValid
@@ -30,6 +31,7 @@ namespace MadreApp.Behaviors
         protected override void OnAttachedTo(Entry bindable)
         {
             _thisEntry = bindable;
+            defaultColor = bindable.TextColor;
 
             if (CompareToEntry != null)
                 CompareToEntry.TextChanged += Bindable_TextChanged;
@@ -49,13 +51,13 @@ namespace MadreApp.Behaviors
         private void Bindable_TextChanged(object sender, TextChangedEventArgs e)
         {
             IsValid = ((Entry)sender).Text.Equals(_thisEntry.Text);
-            _thisEntry.TextColor = IsValid ? Color.Green : Color.Red;
+            _thisEntry.TextColor = IsValid ? defaultColor : Color.Red;
         }
 
         private void HandleTextChanged(object sender, TextChangedEventArgs e)
         {
             IsValid = (bool)CompareToEntry.Text?.Equals(e.NewTextValue);
-            ((Entry)sender).TextColor = IsValid ? Color.Green : Color.Red;
+            ((Entry)sender).TextColor = IsValid ? defaultColor : Color.Red;
         }
     }
 }

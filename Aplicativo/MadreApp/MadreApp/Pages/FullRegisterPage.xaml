@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:customs="clr-namespace:MadreApp.Customs"
+             xmlns:behaviors="clr-namespace:MadreApp.Behaviors"
+             xmlns:converters="clr-namespace:MadreApp.Converters"
+             x:Class="MadreApp.Pages.FullRegisterPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BooleanInverter x:Key="BooleanInverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="FillAndExpand"
+        Orientation="Vertical">
+        <customs:MadreAppLogoView
+            IsBusy="{Binding IsBusy}"
+            BackCommand="{Binding BackCommand}">
+        <customs:MadreAppLogoView.Source>
+                <StackLayout
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    Margin="20,10">
+                    <Label
+                        Text="Perfil" 
+                        FontSize="Large"
+                        HorizontalTextAlignment="Center"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        Margin="0,10"/>
+                    <Label 
+                        Text="Nome" 
+                        FontAttributes="Bold"/>
+                    <Entry 
+                        Text="{Binding Name}"
+                        Placeholder="Informe seu nome"
+                        Keyboard="Text">
+                        <Entry.Behaviors>
+                            <behaviors:RequiredValidator x:Name="NameRequiredValidator" />
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Label 
+                        TextColor="{StaticResource Key=ErrorTextColor}"
+                        Text="O nome é obrigatório"
+                        IsVisible="{Binding Source={x:Reference NameRequiredValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
+                    <Label 
+                        Text="Celular" 
+                        FontAttributes="Bold"/>
+                    <Label 
+                        Text="{Binding Phone}" />
+                    <Label 
+                        Text="Email" 
+                        FontAttributes="Bold"/>
+                    <Entry 
+                        Text="{Binding Email}"
+                        Placeholder="Informe seu email"
+                        Keyboard="Email"
+                        IsVisible="{Binding IsEdit, Converter={StaticResource BooleanInverter}}">
+                        <Entry.Behaviors>
+                            <behaviors:EmailValidator x:Name="EmailValidator"/>
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Label 
+                        Text="{Binding Email}"
+                        IsVisible="{Binding IsEdit}"/>
+                    <Label  
+                        Text="Informe um email válido"
+                        TextColor="{StaticResource Key=ErrorTextColor}" 
+                        IsVisible="{Binding Source={x:Reference EmailValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
+                    <Label 
+                        Text="Senha" 
+                        FontAttributes="Bold"/>
+                    <Entry 
+                        x:Name="passwordEntry"
+                        IsPassword="True"
+                        Text="{Binding Password}"
+                        Placeholder="Informe uma senha">
+                        <Entry.Behaviors>
+                            <behaviors:PasswordValidator x:Name="PasswordValidator"/>
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Label  
+                        Text="A senha deve ter no mínimo 8 caracteres"
+                        TextColor="{StaticResource Key=ErrorTextColor}" 
+                        IsVisible="{Binding Source={x:Reference PasswordValidator}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
+                    <Label 
+                        Text="Confirmar Senha" 
+                        FontAttributes="Bold"/>
+                    <Entry 
+                        IsPassword="True"
+                        Text="{Binding ConfirmPassword}"
+                        Placeholder="Confirme sua senha">
+                        <Entry.Behaviors>
+                            <behaviors:ComparisonBehavior x:Name="ComparisonBehavior" CompareToEntry="{Binding Source={x:Reference passwordEntry}}"/>
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Label  
+                        Text="As senhas não conferem"
+                        TextColor="{StaticResource Key=ErrorTextColor}" 
+                        IsVisible="{Binding Source={x:Reference ComparisonBehavior}, Path=IsValid, Converter={StaticResource BooleanInverter}}" />
+                    <Button 
+                        Text="Registrar" 
+                        Command="{Binding RegisterCommand}"
+                        IsVisible="{Binding IsEdit, Converter={StaticResource BooleanInverter}}"/>
+                    <StackLayout
+                        IsVisible="{Binding IsEdit}">
+                        <Label 
+                            Margin="0,20,0,0"
+                        Text="Senha atual" 
+                        FontAttributes="Bold"/>
+                        <Entry 
+                        IsPassword="True"
+                        Text="{Binding CurrentPassword}"
+                        Placeholder="Informe sua senha atual" />
+                        <Button 
+                            Margin="0,10,0,0"
+                        Text="Atualizar" 
+                        Command="{Binding UpdateCommand}"/>
+                    </StackLayout>
+                </StackLayout>
+        </customs:MadreAppLogoView.Source>
+    </customs:MadreAppLogoView>
+    </ScrollView>
+</ContentPage>

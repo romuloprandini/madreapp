@@ -49,11 +49,23 @@ $app->group(['prefix' => 'api'], function () use ($app) {
 			'email' => 'email',
             'cpf' => 'max:11|unique:usuarios,cpf',
 		]);
-		
-		$usuario = new Usuario(['nome' => $request->nome, 
+
+		$usuario = Usuario::whereTelefone($request->telefone)->first();
+		if(!$usuario) {
+			$usuario = new Usuario(['nome' => $request->nome, 
 								'telefone' => $request->telefone,
 								'email' => $request->has('email') ? $request->email : null,
 								'cpf' => $request->has('cpf') ? $request->cpf : null]);
+		}
+		else {
+			$usuario->nome = $request->nome;
+			if($request->has('email')) {
+				$usuario->email = $request->email;
+			}
+			if($request->has('cpf')) {
+				$usuario->cpf = $request->cpf;
+			}
+		}
 		$usuario->save();
 		
 		return $usuario;

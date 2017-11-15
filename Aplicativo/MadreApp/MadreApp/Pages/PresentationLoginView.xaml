@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MadreApp.Pages.PresentationLoginView">
+    <ScrollView>
+        <StackLayout
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            Margin="10,20">
+            <Image
+                Source="logotipo"
+                HeightRequest="70"
+                Aspect="AspectFit"
+                HorizontalOptions="Center"/>
+            <Grid
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="CenterAndExpand"
+                ColumnSpacing="10"
+                RowSpacing="10"
+                Padding="20,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Image
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Source="especialidades"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="CenterAndExpand"/>
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Text="+500 especialidades médicas"
+                    TextColor="{StaticResource Key=LightTextColor}"
+                    VerticalOptions="CenterAndExpand"/>
+                <Image
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Source="unidades"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="CenterAndExpand"/>
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Text="+20 mil tipos de serviços médicos disponiveis"
+                    TextColor="{StaticResource Key=LightTextColor}"
+                    VerticalOptions="CenterAndExpand"/>
+                <Image
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Source="servicos"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="CenterAndExpand"/>
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Text="+4 mil unidades de atendimento"
+                    TextColor="{StaticResource Key=LightTextColor}"
+                    VerticalOptions="CenterAndExpand"/>
+            </Grid>
+            <StackLayout
+                    VerticalOptions="End"
+                    HorizontalOptions="FillAndExpand"
+                Margin="0,10">
+                <Button 
+                        Text="Entrar" 
+                        Command="{Binding LoginCommand}"/>
+                <BoxView
+                        Margin="0,10"
+                        HeightRequest="1"
+                        HorizontalOptions="FillAndExpand"
+                        Color="{StaticResource Key=LightTextColor}" />
+                <Button 
+                        Text="Registrar" 
+                        Command="{Binding RegisterCommand}"/>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentView>

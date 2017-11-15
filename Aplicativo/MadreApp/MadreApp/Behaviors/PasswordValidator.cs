@@ -4,7 +4,9 @@ namespace MadreApp.Behaviors
 {
     public class PasswordValidator : Behavior<Entry>
     {
-        public static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(PasswordValidator), false);
+        private Color defaultColor;
+
+        public static readonly BindablePropertyKey IsValidPropertyKey = BindableProperty.CreateReadOnly("IsValid", typeof(bool), typeof(PasswordValidator), true);
         public static readonly BindableProperty IsValidProperty = IsValidPropertyKey.BindableProperty;
 
         public bool IsValid
@@ -17,6 +19,8 @@ namespace MadreApp.Behaviors
         {
             IsValid = true;
             bindable.TextChanged += Bindable_TextChanged;
+
+            defaultColor = bindable.TextColor;
         }
         protected override void OnDetachingFrom(Entry bindable)
         {
@@ -26,7 +30,7 @@ namespace MadreApp.Behaviors
         private void Bindable_TextChanged(object sender, TextChangedEventArgs e)
         {
             IsValid = Validators.PasswordValidator(e.NewTextValue);
-            ((Entry)sender).TextColor = IsValid ? Color.Default : Color.Red;
+            ((Entry)sender).TextColor = IsValid ? defaultColor : Color.Red;
         }
     }
 }
