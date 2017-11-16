@@ -6,7 +6,8 @@
       "minimum-system-version": "7.0",
       "scale": "2x",
       "size": "640x960",
-      "idiom": "iphone"
+      "idiom": "iphone",
+      "filename": "splash.png"
     },
     {
       "orientation": "portrait",
